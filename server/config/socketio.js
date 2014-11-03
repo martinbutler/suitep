@@ -18,6 +18,9 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/meetingNotes/meetingNotes.socket').register(socket);
+  require('../api/createActionItem/createActionItem.socket').register(socket);
+  require('../api/sendMail/sendMail.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
 }
 
