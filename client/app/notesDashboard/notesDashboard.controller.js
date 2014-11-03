@@ -3,4 +3,5 @@
 angular.module('suitePApp')
   .controller('NotesdashboardCtrl', function ($scope) {
     $scope.message = 'Hello';
+    myLayout.init();
   });

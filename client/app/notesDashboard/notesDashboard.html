@@ -1,3 +1,52 @@
-<div class="col-md-12">
-This is the notesDashboard view.
+<!-- <div class="col-md-12">
+This is the managerDashboard view.
+</div> -->
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div id="dashBoardPage">
+  
+  <template type="text/html" id="noteTakingTemplate">
+    
+    <div id="ng-app"  ng-controller="demoController" class="ng-scope">
+        <br>
+       
+        <div ng-mouseleave="actionItemTextSet()" ng-mouseenter="actionItemTextClear()" class="container lighter">
+          <div  text-angular="text-angular" ng-model="htmlcontent" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
+        </div>
+        <span>
+          <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="saveNotes()">Save Notes</button>
+          <button type="submit" class="btn btn-info" ng-model="htmlcontent" ng-click="creatActionItem()">Creat Action Item</button>
+          <button ng-show="actItemTxt" type="submit" class="btn btn-success" ng-model="htmlcontent" ng-click="makeActionable()">Make Actionable</button>
+        </span>
+          <input id='makeAction' ng-show="actItemTxt" type='textarea' size="{{actItemTxtLen}}" value="{{actItemTxt}}" />
+        <br>
+
+        <div ta-bind="text" ng-model="htmlcontent" ta-readonly='disabled'></div>
+        <br>
+        
+
+      </div>
+  </template>
+
+  <template type="text/html" id="userlistTemplate">
+    <ul ng-controller="userlistCtrl" class="userlist">
+      <li ng-repeat="user in users" 
+          ng-click="select( user )"
+          ng-class="{selected:user.isSelected}">
+        {{user.name}}
+      </li>
+    </ul>   
+  </template>
+
+  <template type="text/html" id="userDetailTemplate">
+    <div ng-controller="userdetailsCtrl" class="userdetails">
+      <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/152047/{{user.img}}" width="100" height="100" />
+      <h2>{{user.name}}</h2>
+      <p>{{user.street}}</p>
+    </div>
+      <div>
+      <i class="fa fa-camera-retro"></i> fa-camera-retro
+  </div>
+  </template>
+
 </div>
