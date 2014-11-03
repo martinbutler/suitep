@@ -8,7 +8,8 @@ angular.module('suitePApp', [
   'ui.router',
   'ui.bootstrap',
   'ngAnimate',
-  'mgcrea.ngStrap'
+  'mgcrea.ngStrap',
+  'textAngular'
 ])
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider

@@ -22,8 +22,11 @@
       <!-- endinjector -->
     <!-- endbuild -->
 
+    <!-- martin: additions, manual -->
     <link type="text/css" rel="stylesheet" href="bower_components/golden-layout/src/css/goldenlayout-base.css" />
     <link type="text/css" rel="stylesheet" href="bower_components/golden-layout/src/css/goldenlayout-light-theme.css" />
+    <!-- martin: end additions, manual -->
+
   </head>
   <body ng-app="suitePApp">
     <!--[if lt IE 7]>
@@ -63,9 +66,20 @@
       <script src="bower_components/angular-animate/angular-animate.js"></script>
       <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
       <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
+      <script src="bower_components/rangy-official/rangy-core.min.js"></script>
+      <script src="bower_components/rangy-official/rangy-classapplier.min.js"></script>
+      <script src="bower_components/rangy-official/rangy-highlighter.min.js"></script>
+      <script src="bower_components/rangy-official/rangy-selectionsaverestore.min.js"></script>
+      <script src="bower_components/rangy-official/rangy-serializer.min.js"></script>
+      <script src="bower_components/rangy-official/rangy-textrange.min.js"></script>
+      <script src="bower_components/textAngular/dist/textAngular.min.js"></script>
       <!-- endbower -->
       <script src="socket.io-client/socket.io.js"></script>
     <!-- endbuild -->
+
+    <!-- martin: additions, manual -->
+    <script src='bower_components/textAngular/dist/textAngular-sanitize.min.js'></script>
+    <!-- martin: end additions, manual -->
 
         <!-- build:js({.tmp,client}) app/app.js -->
         <script src="app/app.js"></script>
