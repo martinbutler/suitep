@@ -6,7 +6,7 @@ angular.module('suitePApp', [
   'ngSanitize',
   'btford.socket-io',
   'ui.router',
-  // 'ui.bootstrap',
+  'ui.bootstrap',
   'ngAnimate',
   'mgcrea.ngStrap'
 ])
