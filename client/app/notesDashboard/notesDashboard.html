@@ -15,8 +15,8 @@ This is the managerDashboard view.
         </div>
         <span>
           <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="saveNotes()">Save Notes</button>
-          <button type="submit" class="btn btn-info" ng-model="htmlcontent" ng-click="creatActionItem()">Creat Action Item</button>
-          <button ng-show="actItemTxt" type="submit" class="btn btn-success" ng-model="htmlcontent" ng-click="makeActionable()">Make Actionable</button>
+          <button data-animation="am-fade-and-scale" data-template="app/notesDashboard/createActionItem.html" bs-modal="modal" type="submit" class="btn btn-info" ng-click="creatActionItem()">Create Action Item</button>
+          <button data-animation="am-fade-and-scale" data-template="app/notesDashboard/createActionItem.html" bs-modal="modal" ng-show="actItemTxt" type="submit" class="btn btn-success">Make Actionable</button>
         </span>
           <input id='makeAction' ng-show="actItemTxt" type='textarea' size="{{actItemTxtLen}}" value="{{actItemTxt}}" />
         <br>

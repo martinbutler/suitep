@@ -65,7 +65,26 @@ a.text-gray:hover{
     color:#5f5f5f;
 }
 
+// martin: modal popover
+
+.fillWidth{
+    width:100%;
+}
+
 // martin: other
 #makeAction {
     background-color: #5cb85c;
+}
+
+.navbar {
+    background-color: #333333;
+}
+.navbar > .container .navbar-brand {
+    color: white;
+}
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+.navbar-default .navbar-text {
+    color: white;
 }

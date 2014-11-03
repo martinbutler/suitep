@@ -1,0 +1,35 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" ng-show="title">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h3 class="modal-title" ng-bind-html="title"></h3>
+      </div>
+      <div class="modal-body" ng-show="content">
+
+        
+        <h5>Action Item Title:</h5>
+        <input class="fillWidth" type="text" ng-model="actItemTxt.substr(0, 50)" name="text" autofocus/>
+        <h5>Action Item Description:</h5>
+        <textarea class="fillWidth" type="text" ng-model="actItemTxt" ngMinlength="1" name="text"/>
+
+       <!--  <h4>LEAVE: add dropdown for assignee</h4>
+        <p>This <a href="#" role="button" class="btn btn-default popover-test" data-title="A Title" data-content="And here's some amazing content. It's very engaging. right?" bs-popover>button</a> should trigger a popover on click.</p>
+ -->
+
+        <form name="datepickerForm" class="form-inline" role="form">
+          <div class="form-group" ng-class="{'has-error': datepickerForm.date2.$invalid}">
+            <label class="control-label"><i class="fa fa-calendar"></i> Due Date </label>
+            <input type="text" class="form-control" ng-model="selectedDateAsNumber" data-date-format="yyyy-MM-dd" data-date-type="number" data-min-date="02/10/86" data-autoclose="1" name="date2" startDate bs-datepicker>
+          </div>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="$hide()">Cancel</button>
+        <button type="button" class="btn btn-primary" ng-click="createActionItem()">Create Action Item</button>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,5 +1,6 @@
 'use strict';
 
+
 angular.module('suitePApp')
   .controller('NotesdashlayoutCtrl', function ($scope) {
     $scope.message = 'Hello';
@@ -44,7 +45,7 @@ angular.module('userdetails', [] )
     });
   });
 
-angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap' ] )
+angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngSanitize' ] )
   .config(['$provide', function($provide){
     $provide.decorator('taOptions', ['$delegate', function(taOptions){
       // $delegate is the taOptions we are decorating
@@ -87,12 +88,20 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap' ] )
       return taTools;
     }]);
   }])
+
+  // for the pop action item creator
+  .config(function($modalProvider) {
+    angular.extend($modalProvider.defaults, {
+      html: true
+    });
+  })
+
   .controller('demoController', function($scope, $http, $aside) {
     $scope.orightml = '<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/j7_lSP8Vc3o" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
     $scope.htmlcontent = $scope.orightml;
     $scope.disabled = false;
 
-
+    // make actionable button functionality
     $scope.actionItemTextSet = function() {
       if(document.getSelection().anchorNode === null || document.getSelection().anchorNode.attributes) {
         return;
@@ -105,20 +114,18 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap' ] )
       $scope.actItemTxtLen = 0;
     };
 
-
-    $scope.makeActionable = function() {
+    // for the pop action item creator
+    $scope.modal = {title: 'Action Item Creator', content: 'Add your Action Item Title, Assignee, and update Description'};
+    
+    $scope.createActionItem = function() {
       if($scope.actItemTxt === '') {
         return;
       }
       console.log("buttonClicked", $scope.actItemTxt);
-      $scope.actItemTxt = document.getSelection().anchorNode.data;
+      $scope.actItemTxt = '';
 
     };
-    $scope.createActionItem = function() {
-      console.log("buttonClicked", $scope.actItemTxt);
-      $scope.actItemTxt = document.getSelection().anchorNode.data;
 
-    };
 
     $scope.saveNotes = function() {
       if($scope.htmlcontent === '') {
@@ -127,15 +134,6 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap' ] )
       $http.post('/api/meetingNotess', { notes: $scope.htmlcontent });
     };
 
-  // // Show a basic aside from a controller
-  // var myAside = $aside({title: 'My Title', content: 'My Content', show: true});
-
-  // // Pre-fetch an external template populated with a custom scope
-  // var myOtherAside = $aside({scope: $scope, template: 'aside/docs/aside.tpl.demo.html'});
-  // // Show when some event occurs (use $promise property to ensure the template has been loaded)
-  // myOtherAside.$promise.then(function() {
-  //   myOtherAside.show();
-  // })
 
   });
 
