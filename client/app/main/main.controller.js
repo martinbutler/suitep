@@ -1,7 +1,13 @@
 'use strict';
 
 angular.module('suitePApp')
-  .controller('MainCtrl', function ($scope, $http, socket) {
+  .config(function($modalProvider) {
+    angular.extend($modalProvider.defaults, {
+      html: true
+    });
+  })
+
+  .controller('MainCtrl', function ($scope, $http, socket, $aside, $modal) {
     $scope.awesomeThings = [];
 
     $http.get('/api/things').success(function(awesomeThings) {
@@ -24,4 +30,8 @@ angular.module('suitePApp')
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('thing');
     });
+
+  $scope.modal = {title: 'Title', content: 'Hello Modal<br />This is a multiline message!'};
+
   });
+
