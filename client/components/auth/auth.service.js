@@ -1,10 +1,11 @@
 'use strict';
 
 angular.module('suitePApp')
-  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
+  .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $window) {
     var currentUser = {};
     if($cookieStore.get('token')) {
       currentUser = User.get();
+      $window.currentUser = currentUser;
     }
 
     return {

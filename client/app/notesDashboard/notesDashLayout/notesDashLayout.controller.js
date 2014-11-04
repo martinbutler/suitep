@@ -97,10 +97,13 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
     });
   })
   
-  .controller('demoController', function($scope, $http, $aside) {
+  .controller('demoController', function($scope, $http, $aside, $window) {
     $scope.orightml = '<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/j7_lSP8Vc3o" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
     $scope.htmlcontent = $scope.orightml;
     $scope.disabled = false;
+
+    var currentUser = $window.currentUser
+
 
     // make actionable button functionality
     $scope.actionItemTextSet = function() {
@@ -134,7 +137,8 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       if($scope.htmlcontent === '') {
         return;
       }
-      $http.post('/api/sendMails', { content: $scope.htmlcontent});
+      console.log('projname:', $scope.projectName);
+      $http.post('/api/sendMails', { content: $scope.htmlcontent, projectName: $scope.projectName, replyTo: currentUser.email});
     };
 
 

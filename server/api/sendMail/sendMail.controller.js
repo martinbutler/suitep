@@ -29,7 +29,7 @@ exports.show = function(req, res) {
 //   });
 // };
 exports.create = function(req, res) {
-  console.log(req.body);
+  console.log('i req the body:', req.body);
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -43,7 +43,7 @@ exports.create = function(req, res) {
       from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
       replyTo: req.body.replyTo,  // 'martinebutler@gmail.com',
       to: 'martinebutler@gmail.com', // list of receivers
-      subject: 'Hello ✔', // Subject line
+      subject: req.body.projectName, // '✔ ' + req.body.projectName, // Subject line
       // text: 'Hello world ✔', // plaintext body
       html: req.body.content //'<b>Hello world ✔</b>' // html body
   };
