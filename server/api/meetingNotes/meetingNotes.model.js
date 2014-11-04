@@ -4,9 +4,9 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var MeetingnotesSchema = new Schema({
-  name: String,
-  info: String,
-  active: Boolean
+  user: String,
+  notes: String,
+  projectName: String
 });
 
 module.exports = mongoose.model('Meetingnotes', MeetingnotesSchema);

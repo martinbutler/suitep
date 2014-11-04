@@ -2,6 +2,7 @@
 
 var _ = require('lodash');
 var Sendmail = require('./sendMail.model');
+var nodemailer = require('nodemailer');
 
 // Get list of sendMails
 exports.index = function(req, res) {
@@ -21,11 +22,42 @@ exports.show = function(req, res) {
 };
 
 // Creates a new sendMail in the DB.
+// exports.create = function(req, res) {
+//   Sendmail.create(req.body, function(err, sendMail) {
+//     if(err) { return handleError(res, err); }
+//     return res.json(201, sendMail);
+//   });
+// };
 exports.create = function(req, res) {
-  Sendmail.create(req.body, function(err, sendMail) {
-    if(err) { return handleError(res, err); }
-    return res.json(201, sendMail);
+  console.log(req.body);
+  var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'suiteproductivity@gmail.com',
+        pass: 'fullSt@ck123'
+    }
   });
+
+  // setup e-mail data with unicode symbols
+  var mailOptions = {
+      from: 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
+      replyTo: req.body.replyTo,  // 'martinebutler@gmail.com',
+      to: 'martinebutler@gmail.com', // list of receivers
+      subject: 'Hello ✔', // Subject line
+      // text: 'Hello world ✔', // plaintext body
+      html: req.body.content //'<b>Hello world ✔</b>' // html body
+  };
+
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+          console.log(error);
+      }else{
+          console.log('Message sent: ' + info.response);
+          return res.json(info.response);
+      }
+  });
+   // return res.json(201, sendMail);
 };
 
 // Updates an existing sendMail in the DB.

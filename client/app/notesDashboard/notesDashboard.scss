@@ -6,6 +6,8 @@
 
 // start: martin for gl
 
+
+
 textarea.boxsizingBorder {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -79,6 +81,7 @@ a.text-gray:hover{
 // martin: other
 #makeAction {
     background-color: #5cb85c;
+    border-color: #6ccb9c;
 }
 
 .navbar {
@@ -93,6 +96,12 @@ a.text-gray:hover{
 .navbar-default .navbar-text {
     color: white;
 }
+
+#projectName {
+    background-color: #b9b9b9;
+    border-color: #c9c9c9;
+}
+
 
 
 .container {

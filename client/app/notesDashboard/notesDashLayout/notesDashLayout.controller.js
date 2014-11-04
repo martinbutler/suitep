@@ -7,9 +7,9 @@ angular.module('suitePApp')
   });
 
 
-angular.module('userlist', [])
-  .controller('userlistCtrl', function( $scope, $timeout, container, state ) {
 
+angular.module('userlist', [])
+  .controller('userlistCtrl', function( $scope, $timeout, container, state) {
     var selectedUser = {};
 
     $scope.users = [
@@ -32,9 +32,10 @@ angular.module('userlist', [])
       container.layoutManager.eventHub.emit( 'userSelected', user );
     };
   });
+
   
 angular.module('userdetails', [] )
-  .controller('userdetailsCtrl', function( $scope, container, state ) {
+  .controller('userdetailsCtrl', function( $scope, container, state) {
     $scope.user = state.user || null;
     // $scope.htmlcontent = state.htmltexttest || null;
 
@@ -45,7 +46,7 @@ angular.module('userdetails', [] )
     });
   });
 
-angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngSanitize' ] )
+angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
   .config(['$provide', function($provide){
     $provide.decorator('taOptions', ['$delegate', function(taOptions){
       // $delegate is the taOptions we are decorating
@@ -95,7 +96,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       html: true
     });
   })
-
+  
   .controller('demoController', function($scope, $http, $aside) {
     $scope.orightml = '<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/j7_lSP8Vc3o" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
     $scope.htmlcontent = $scope.orightml;
@@ -107,10 +108,12 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
         return;
       }
       $scope.actItemTxt = document.getSelection().anchorNode.data;
-      $scope.actItemTxtLen = $scope.actItemTxt.length > 100 ? 100 : $scope.actItemTxt.length ;
+      $scope.actItemTitle = $scope.actItemTxt.substring(0, 5);
+      $scope.actItemTxtLen = $scope.actItemTxt.length > 75 ? 75 : $scope.actItemTxt.length ;
     };
     $scope.actionItemTextClear = function() {
       $scope.actItemTxt = "";
+      $scope.actItemTitle = "";
       $scope.actItemTxtLen = 0;
     };
 
@@ -126,16 +129,25 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
 
     };
 
+    // consider using a factory for call back success.
+    $scope.sendEmail = function() {
+      if($scope.htmlcontent === '') {
+        return;
+      }
+      $http.post('/api/sendMails', { content: $scope.htmlcontent});
+    };
+
 
     $scope.saveNotes = function() {
       if($scope.htmlcontent === '') {
         return;
       }
-      $http.post('/api/meetingNotess', { notes: $scope.htmlcontent });
+      $http.post('/api/meetingNotess', { notes: $scope.htmlcontent});
     };
 
 
   });
+
 
 var AngularModuleComponent = function( container, state ) {
   var html = $( '#' + state.templateId ).html(),
