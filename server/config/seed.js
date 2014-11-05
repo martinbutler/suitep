@@ -31,35 +31,47 @@ var Contact = require('../api/contact/contact.model');
 //   });
 // });
 
-User.find({}).remove(function() {
-  User.create({
-    provider: 'local',
-    name: 'Test User',
-    email: 'test@test.com',
-    password: 'test'
-  }, {
-    provider: 'local',
-    role: 'admin',
-    name: 'Admin',
-    email: 'admin@admin.com',
-    password: 'admin'
-  }, function() {
-      console.log('finished populating users');
-    }
-  );
-});
+// User.find({}).remove(function() {
+//   User.create({
+//     provider: 'local',
+//     name: 'Test User',
+//     email: 'test@test.com',
+//     password: 'test'
+//   }, {
+//     provider: 'local',
+//     role: 'admin',
+//     name: 'Admin',
+//     email: 'admin@admin.com',
+//     password: 'admin'
+//   }, function() {
+//       console.log('finished populating users');
+//     }
+//   );
+// });
 
-Contact.find({}).remove(function() {
-  Contact.create({
-    name: 'marty butler',
-    email: 'martinebutler@gmail.com',
-    user: '545a8817f6900ec322b18312'
-  }, {
-    name: 'eileen dover',
-    email: 'ifnoxyz@yahoo.com',
-    user: '545a8817f6900ec322b18312'
-  }, function() {
-      console.log('finished populating contacts');
-    }
-  );
-});
+// Contact.find({}).remove(function() {
+//   Contact.create({
+//     name: 'marty butler',
+//     email: 'martinebutler@gmail.com',
+//     user: '545a8817f6900ec322b18312',
+//     projects: ['545aa4126dae678a23c83434', '545aa4b56dae678a23c83439']
+//   }, {
+//     name: 'eileen dover',
+//     email: 'ifnoxyz@yahoo.com',
+//     user: '545a8817f6900ec322b18312',
+//     projects: ['545aa4126dae678a23c83434', '545aa4b56dae678a23c83439']
+//   }, {
+//     name: 'ben dover',
+//     email: 'martin@martinbutler.com',
+//     user: '545a8817f6900ec322b18312',
+//     projects: ['545aa4126dae678a23c83434']
+//   }, {
+//     name: 'Hal Jalikakik',
+//     email: 'swamp97@hotmail.com',
+//     user: '545a8817f6900ec322b18312',
+//     projects: ['545aa4126dae678a23c83434', '545aa4b56dae678a23c83439']
+//   }, function() {
+//       console.log('finished populating contacts');
+//     }
+//   );
+// });

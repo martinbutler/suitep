@@ -33,7 +33,6 @@ angular.module('userlist', [])
     };
 
     var currentUser = $window.currentUser;
-    console.log("currentUser", currentUser);
 
     // $http.get('/api/project/'+ currentUser._id).
     //   success(function(data, status, headers, config) {
@@ -192,7 +191,6 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
         $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: $window.project_id, date: today}).
           success(function(data, status, headers, config) {
             $window.meetingNote_id = data._id;
-            console.log('data.id:', data._id);
             $http.put('/api/projects/updateMeeting/'+$window.project_id, { meetingNotes: data._id});
           });
       } else {

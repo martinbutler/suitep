@@ -6,7 +6,7 @@ var mongoose = require('mongoose'),
 var ContactSchema = new Schema({
   name: String,
   email: String,
-  Project: [{ type: Schema.Types.ObjectId, ref: 'Project' }],
+  projects: [{ type: Schema.Types.ObjectId, ref: 'Project' }],
   actionItems: [{  type: Schema.Types.ObjectId, ref: 'Actionitem' }],
   user: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
