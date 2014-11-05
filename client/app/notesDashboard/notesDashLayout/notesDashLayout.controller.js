@@ -9,7 +9,7 @@ angular.module('suitePApp')
 
 
 angular.module('userlist', [])
-  .controller('userlistCtrl', function( $scope, $timeout, container, state) {
+  .controller('userlistCtrl', function( $scope, $timeout, container, state, $window, $http) {
     var selectedUser = {};
 
     $scope.users = [
@@ -31,6 +31,21 @@ angular.module('userlist', [])
       container.extendState({ selectedUserIndex: $scope.users.indexOf( user ) });
       container.layoutManager.eventHub.emit( 'userSelected', user );
     };
+
+    var currentUser = $window.currentUser;
+    console.log("currentUser", currentUser);
+
+    // $http.get('/api/project/'+ currentUser._id).
+    //   success(function(data, status, headers, config) {
+    //     console.table({data: data}, {status: status}, {headers: headers}, {config: config});
+    //   }).
+    //   error(function(data, status, headers, config) {
+    //     // called asynchronously if an error occurs
+    //     // or server returns response with an error status.
+    //     console.table({data: data}, {status: status}, {headers: headers}, {config: config});
+    //   });
+
+
   });
 
   
@@ -69,7 +84,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       };
       return taOptions; // whatever you return will be the taOptions
     }])
-    // this demonstrates changing the classes of the icons for the tools for font-awesome v3.x
+    // changing the classes of the icons for the tools for font-awesome v3.x
     $provide.decorator('taTools', ['$delegate', function(taTools){
       taTools.bold.iconclass = 'fa fa-bold';
       taTools.italics.iconclass = 'fa fa-italic';
@@ -102,7 +117,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
     $scope.htmlcontent = $scope.orightml;
     $scope.disabled = false;
 
-    var currentUser = $window.currentUser
+    var currentUser = $window.currentUser;
 
 
     // make actionable button functionality
@@ -111,7 +126,8 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
         return;
       }
       $scope.actItemTxt = document.getSelection().anchorNode.data;
-      $scope.actItemTitle = $scope.actItemTxt.substring(0, 5);
+      var titleLength = ($scope.actItemTxt.indexOf(".") == -1) ? 25 : $scope.actItemTxt.indexOf(".");
+      $scope.actItemTitle = $scope.actItemTxt.substring(0, titleLength);
       $scope.actItemTxtLen = $scope.actItemTxt.length > 75 ? 75 : $scope.actItemTxt.length ;
     };
     $scope.actionItemTextClear = function() {
@@ -127,29 +143,62 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       if($scope.actItemTxt === '') {
         return;
       }
-      console.log("buttonClicked", $scope.actItemTxt);
       $scope.actItemTxt = '';
-
     };
 
     // consider using a factory for call back success.
     $scope.sendEmail = function() {
-      if($scope.htmlcontent === '') {
+      if($scope.htmlcontent === '' || $scope.projectName === undefined) {
         return;
       }
-      console.log('projname:', $scope.projectName);
-      $http.post('/api/sendMails', { content: $scope.htmlcontent, projectName: $scope.projectName, replyTo: currentUser.email});
+      $http.post('/api/sendMails', { content: $scope.htmlcontent, projectName: $scope.projectName, replyTo: currentUser.email, name: currentUser.name});
     };
 
 
     $scope.saveNotes = function() {
-      if($scope.htmlcontent === '') {
+      if($scope.htmlcontent === '' || $scope.projectName === undefined) {
         return;
       }
-      $http.post('/api/meetingNotess', { notes: $scope.htmlcontent});
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1;
+      var yyyy = today.getFullYear();
+      if(dd<10) {
+          dd='0'+dd
+      } 
+
+      if(mm<10) {
+          mm='0'+mm
+      } 
+
+      today = yyyy+'/'+mm+'/'+dd;
+
+      if ($window.project_id === undefined) {
+        $http.post('/api/projects', { user: currentUser._id, name: $scope.projectName, Startdate: today}).
+        success(function(data, status, headers, config) {
+          // console.table({data: data}, {status: status}, {headers: headers}, {config: config});
+          $window.project_id = data._id;
+
+          $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: data._id, date: today}).
+            success(function(data, status, headers, config) {
+              $window.meetingNote_id = data._id;
+              $http.put('/api/projects/updateMeeting/'+$window.project_id, { meetingNotes: data._id});
+            });
+          $http.put('/api/users/project/'+currentUser._id, {project: data._id});
+        }).
+          error(function(data, status, headers, config) {
+        });
+      } else if ($window.meetingNote_id === undefined) {
+        $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: $window.project_id, date: today}).
+          success(function(data, status, headers, config) {
+            $window.meetingNote_id = data._id;
+            console.log('data.id:', data._id);
+            $http.put('/api/projects/updateMeeting/'+$window.project_id, { meetingNotes: data._id});
+          });
+      } else {
+        $http.put('/api/meetingNotess/'+$window.meetingNote_id, { notes: $scope.htmlcontent});
+      }
     };
-
-
   });
 
 

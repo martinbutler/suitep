@@ -7,6 +7,7 @@
 
 var Thing = require('../api/thing/thing.model');
 var User = require('../api/user/user.model');
+var Contact = require('../api/contact/contact.model');
 
 // Thing.find({}).remove(function() {
 //   Thing.create({
@@ -30,20 +31,35 @@ var User = require('../api/user/user.model');
 //   });
 // });
 
-// User.find({}).remove(function() {
-//   User.create({
-//     provider: 'local',
-//     name: 'Test User',
-//     email: 'test@test.com',
-//     password: 'test'
-//   }, {
-//     provider: 'local',
-//     role: 'admin',
-//     name: 'Admin',
-//     email: 'admin@admin.com',
-//     password: 'admin'
-//   }, function() {
-//       console.log('finished populating users');
-//     }
-//   );
-// });
+User.find({}).remove(function() {
+  User.create({
+    provider: 'local',
+    name: 'Test User',
+    email: 'test@test.com',
+    password: 'test'
+  }, {
+    provider: 'local',
+    role: 'admin',
+    name: 'Admin',
+    email: 'admin@admin.com',
+    password: 'admin'
+  }, function() {
+      console.log('finished populating users');
+    }
+  );
+});
+
+Contact.find({}).remove(function() {
+  Contact.create({
+    name: 'marty butler',
+    email: 'martinebutler@gmail.com',
+    user: '545a8817f6900ec322b18312'
+  }, {
+    name: 'eileen dover',
+    email: 'ifnoxyz@yahoo.com',
+    user: '545a8817f6900ec322b18312'
+  }, function() {
+      console.log('finished populating contacts');
+    }
+  );
+});

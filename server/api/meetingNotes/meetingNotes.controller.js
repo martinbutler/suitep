@@ -22,7 +22,9 @@ exports.show = function(req, res) {
 
 // Creates a new meetingNotes in the DB.
 exports.create = function(req, res) {
+  console.log("api/meetings.before create");
   Meetingnotes.create(req.body, function(err, meetingNotes) {
+    console.log("api/meetingNotes");
     if(err) { return handleError(res, err); }
     return res.json(201, meetingNotes);
   });

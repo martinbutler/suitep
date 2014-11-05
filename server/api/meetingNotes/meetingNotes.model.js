@@ -4,9 +4,10 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var MeetingnotesSchema = new Schema({
-  user: String,
+  project: { type: Schema.Types.ObjectId, ref: 'Project' },
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
   notes: String,
-  projectName: String
+  date: Date
 });
 
 module.exports = mongoose.model('Meetingnotes', MeetingnotesSchema);

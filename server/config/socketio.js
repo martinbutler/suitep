@@ -18,8 +18,10 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/contact/contact.socket').register(socket);
+  require('../api/project/project.socket').register(socket);
+  require('../api/actionItem/actionItem.socket').register(socket);
   require('../api/meetingNotes/meetingNotes.socket').register(socket);
-  require('../api/createActionItem/createActionItem.socket').register(socket);
   require('../api/sendMail/sendMail.socket').register(socket);
   require('../api/thing/thing.socket').register(socket);
 }

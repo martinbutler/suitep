@@ -13,8 +13,8 @@ This is the managerDashboard view.
         <div  text-angular="text-angular" ng-model="htmlcontent" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
       </div>
       <span>
-        <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="sendEmail()"><i class="fa fa-save"></i> Save</button>
-        <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="sendEmail()"><i class="fa fa-envelope"></i> Notes</button>
+        <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="saveNotes()"><i class="fa fa-save"></i> Save</button>
+        <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="sendEmail()"><i class="fa fa-send-o"></i> Notes</button>
         <button data-animation="am-fade-and-scale" data-template="app/notesDashboard/createActionItem.html" bs-modal="modal" type="submit" class="btn btn-info" ng-click="creatActionItem()">Create Action Item</button>
         <button data-animation="am-fade-and-scale" data-template="app/notesDashboard/createActionItem.html" bs-modal="modal" ng-show="actItemTxt" type="submit" class="btn btn-success">Make Actionable</button>
       </span>
