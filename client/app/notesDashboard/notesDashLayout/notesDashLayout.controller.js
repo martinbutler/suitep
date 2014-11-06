@@ -13,16 +13,18 @@ angular.module('userlist', [])
     var selectedUser = {};
 
     $scope.users = [
-      { name: 'Jackson Turner', street: '217 Tawny End', img: 'men_1.jpg' },
-      { name: 'Megan Perry', street: '77 Burning Ramp', img: 'women_1.jpg' },
-      { name: 'Ryan Harris', street: '12 Hazy Apple Route', img: 'men_2.jpg' },
-      { name: 'Jennifer Edwards', street: '33 Maple Drive', img: 'women_2.jpg' },
-      { name: 'Noah Jenkins', street: '423 Indian Pond Cape', img: 'men_3.jpg' }
+      // { name: 'Jackson Turner', street: '217 Tawny End', img: 'men_1.jpg' },
+      // { name: 'Megan Perry', street: '77 Burning Ramp', img: 'women_1.jpg' },
+      // { name: 'Ryan Harris', street: '12 Hazy Apple Route', img: 'men_2.jpg' },
+      // { name: 'Jennifer Edwards', street: '33 Maple Drive', img: 'women_2.jpg' },
+      // { name: 'Noah Jenkins', street: '423 Indian Pond Cape', img: 'men_3.jpg' }
     ];
 
-    $timeout(function(){
-      $scope.select( $scope.users[ state.selectedUserIndex ] );
-    });
+    // $timeout(function(){
+    //   $scope.select( $scope.users[ state.selectedUserIndex ] );
+    // });
+
+    var currentUser = $window.currentUser;
 
     $scope.select = function( user ) {
       selectedUser.isSelected = false;
@@ -30,16 +32,31 @@ angular.module('userlist', [])
       selectedUser = user;
       container.extendState({ selectedUserIndex: $scope.users.indexOf( user ) });
       container.layoutManager.eventHub.emit( 'userSelected', user );
+      container.layoutManager.eventHub.emit( 'testCurrentUser', currentUser );
     };
 
-    var currentUser = $window.currentUser;
-    console.log("currentUser", currentUser);
+    container.layoutManager.eventHub.on( 'projectName', function( projectName ){
+      $scope.users = [];
+            // projectName.contacts.forEach(function(contact_id) {
+        $http.get('api/projects/contacts/'+projectName._id).
+          success(function(data, status, headers, config) {
+            // $scope.users.push( {name: data.name});
+            $scope.projectData = data;
+            $scope.projectName = projectName;
+            container.extendState({ projectName: projectName });
+            data.forEach(function(obj) {
+              $scope.users.push({name: obj.name})
+            });
+            
+          });
+         $scope.$apply(); 
+    });
 
   });
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 angular.module('userdetails', [] )
-  .controller('userdetailsCtrl', function( $scope, container, state) {
+  .controller('userdetailsCtrl', function( $scope, container, state, $http) {
     $scope.user = state.user || null;
     // $scope.htmlcontent = state.htmltexttest || null;
 
@@ -47,6 +64,29 @@ angular.module('userdetails', [] )
       $scope.user = user;
       container.extendState({ user: user });
       $scope.$apply();
+    });
+
+    container.layoutManager.eventHub.on( 'testCurrentUser', function( tUser ){
+      $scope.tUser = tUser;
+      container.extendState({ tUser: tUser });
+      $scope.$apply();
+    });
+
+    container.layoutManager.eventHub.on( 'projectName', function( projectName ){
+      $scope.users = [];
+            // projectName.contacts.forEach(function(contact_id) {
+        $http.get('api/projects/contacts/'+projectName._id).
+          success(function(data, status, headers, config) {
+            // $scope.users.push( {name: data.name});
+            $scope.projectData = data;
+            $scope.projectName = projectName;
+            container.extendState({ projectName: projectName });
+            data.forEach(function(obj) {
+              $scope.users.push({name: obj.name})
+            });
+            
+          });
+         $scope.$apply(); 
     });
   });
 
@@ -106,22 +146,36 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
   .config(function($selectProvider) {
     angular.extend($selectProvider.defaults, {
       animation: 'am-flip-x',
-      placeholder: 'Select Previous Project'
+      placeholder: 'Select A Current Project',
+      delay: 300
       // sort: false
     });
   })
   
-  .controller('demoController', function($scope, $http, $aside, $window) {
+  .controller('demoController', function($scope, $http, $aside, $window, container) {
     $scope.orightml = '<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/j7_lSP8Vc3o" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
     $scope.htmlcontent = ''; // $scope.orightml;
     $scope.disabled = false;
 
+    $scope.$watch('projectName', function() {
+        if ($scope.projectName) {
+          container.layoutManager.eventHub.emit( 'projectName', $scope.projectName );
+          
+          $http.get('api/projects/contacts/'+$scope.projectName._id).
+            success(function(data, status, headers, config) {
+              $scope.projectTeam = data;
+              });   
+          }
+      });
+
+
     var currentUser = $window.currentUser;
-    var projectObjs = [];
+    // var projectObjs = [];
+
+    // load the project names into selector.
     // currentUser.projects.forEach(function(project_id) {
       $http.get('api/projects/'+currentUser.projects).
         success(function(data, status, headers, config) {
-          console.log(data);
           $scope.projectData = data;
         });
       // projectObjs.push()
@@ -146,11 +200,23 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
     // for the pop action item creator
     $scope.modal = {title: 'Action Item Creator', content: 'Add your Action Item Title, Assignee, and update Description'};
     
+    $scope.actItemOwner;
     $scope.createActionItem = function() {
       if($scope.actItemTxt === '') {
         return;
       }
-      $scope.actItemTxt = '';
+      $http.post('/api/actionItems/', {title: $scope.actItemTitle, 
+                                        description: $scope.actItemTxt,
+                                        dueDate: $scope.actItemDueDate,
+                                        project: $scope.projectName._id,
+                                        user: $scope.projectName.user,
+                                        owner: $scope.actItemOwner._id})
+      .success(function(data, status, headers, config) {
+        $scope.actItemTxt = '';
+        $http.put('/api/projects/updateActionItem/'+$window.project_id, { actionItems: data._id});
+      });
+
+
     };
 
     // consider using a factory for call back success.
@@ -161,27 +227,19 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       $http.post('/api/sendMails', { content: $scope.htmlcontent, projectName: $scope.projectName, replyTo: currentUser.email, name: currentUser.name});
     };
 
+
     $scope.saveNotes = function() {
       if($scope.htmlcontent === '' || $scope.projectName === undefined) {
         return;
       }
-
       // create a variable to get today's date.
       var today = new Date();
       var dd = today.getDate();
       var mm = today.getMonth()+1;
       var yyyy = today.getFullYear();
-      if(dd<10) {
-          dd='0'+dd
-      } 
-
-      if(mm<10) {
-          mm='0'+mm
-      } 
-
+      if(dd<10) { dd='0'+dd };
+      if(mm<10) { mm='0'+mm }; 
       today = yyyy+'/'+mm+'/'+dd;
-
-
       // for creating projects and meeting notes... first iteration for seeding data
       if ($window.project_id === undefined) {
         $http.post('/api/projects', { user: currentUser._id, name: $scope.projectName, Startdate: today}).
@@ -207,7 +265,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       } else {
         $http.put('/api/meetingNotess/'+$window.meetingNote_id, { notes: $scope.htmlcontent});
       }
-    };
+    }; // end of saveNotes
   });
 
 
@@ -230,7 +288,7 @@ var myLayout = new GoldenLayout({
     type: 'row',
     content: [{
       width: 75,
-      title: 'Notes',
+      title: 'Project Notes',
       type: 'component',
       componentName: 'angularModule',
       componentState: {
@@ -241,7 +299,7 @@ var myLayout = new GoldenLayout({
       type: 'column',
       content: [{
         type: 'component',
-        title: 'Registered Users',
+        title: 'Project Team',
         componentName: 'angularModule',
         componentState: {
           module: 'userlist',
@@ -250,7 +308,7 @@ var myLayout = new GoldenLayout({
         }
       },{
         type: 'component',
-        title: 'Selected User',
+        title: 'Action Items',
         componentName: 'angularModule',
         componentState: {
           module: 'userdetails',

@@ -16,6 +16,6 @@ router.post('/', controller.create);
 
 router.put('/:id', controller.update);
 router.put('/project/:id', controller.updateProjects);
-router.get('/contacts/:id', auth.isAuthenticated(), controller.getContacts);
+router.get('/contacts/:id', controller.getContacts);
 
 module.exports = router;

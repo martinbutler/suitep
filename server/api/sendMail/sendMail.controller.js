@@ -34,7 +34,7 @@ exports.create = function(req, res) {
     service: 'Gmail',
     auth: {
         user: 'suiteproductivity@gmail.com',
-        pass: ''
+        pass: 'simple!123'
     }
   });
 

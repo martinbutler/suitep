@@ -13,5 +13,7 @@ router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
 router.put('/updateMeeting/:id', controller.updateMeetings);
+router.put('/updateActionItem/:id', controller.updateActions);
+router.get('/contacts/:id', controller.getContacts);
 
 module.exports = router;
