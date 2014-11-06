@@ -8,7 +8,11 @@ This is the managerDashboard view.
   <template type="text/html" id="noteTakingTemplate">
     
     <div id="ng-app"  ng-controller="demoController" class="ng-scope">
-      <h4>Project Name: <input id='projectName' size="50" type='textarea' ng-model="projectName" /> </h4>   
+      <!-- <h4>Project Name: <input id='projectName' size="50" type='textarea' ng-model="projectName" /> </h4> projectData--> 
+      <label>Project Name:&nbsp;</label>
+      <button type="button" class="btn btn-default" ng-model="test" data-html="1" ng-options="project as project.name for project in projectData" bs-select>
+        Action <span class="caret"></span>
+      </button>  
       <div ng-mouseleave="actionItemTextSet()" ng-mouseenter="actionItemTextClear()" class="container lighter">
         <div  text-angular="text-angular" ng-model="htmlcontent" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
       </div>

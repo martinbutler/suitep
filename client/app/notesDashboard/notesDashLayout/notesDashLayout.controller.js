@@ -1,13 +1,13 @@
 'use strict';
 
-
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 angular.module('suitePApp')
   .controller('NotesdashlayoutCtrl', function ($scope) {
     $scope.message = 'Hello';
   });
 
 
-
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 angular.module('userlist', [])
   .controller('userlistCtrl', function( $scope, $timeout, container, state, $window, $http) {
     var selectedUser = {};
@@ -33,21 +33,11 @@ angular.module('userlist', [])
     };
 
     var currentUser = $window.currentUser;
-
-    // $http.get('/api/project/'+ currentUser._id).
-    //   success(function(data, status, headers, config) {
-    //     console.table({data: data}, {status: status}, {headers: headers}, {config: config});
-    //   }).
-    //   error(function(data, status, headers, config) {
-    //     // called asynchronously if an error occurs
-    //     // or server returns response with an error status.
-    //     console.table({data: data}, {status: status}, {headers: headers}, {config: config});
-    //   });
-
+    console.log("currentUser", currentUser);
 
   });
 
-  
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 angular.module('userdetails', [] )
   .controller('userdetailsCtrl', function( $scope, container, state) {
     $scope.user = state.user || null;
@@ -60,6 +50,7 @@ angular.module('userdetails', [] )
     });
   });
 
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
   .config(['$provide', function($provide){
     $provide.decorator('taOptions', ['$delegate', function(taOptions){
@@ -117,7 +108,18 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
     $scope.disabled = false;
 
     var currentUser = $window.currentUser;
+    var projectObjs = [];
+    // currentUser.projects.forEach(function(project_id) {
+      $http.get('api/projects/'+currentUser.projects).
+        success(function(data, status, headers, config) {
+          console.log(data);
+          $scope.projectData = data;
+        });
 
+        
+
+      // projectObjs.push()
+    // });
 
     // make actionable button functionality
     $scope.actionItemTextSet = function() {
@@ -153,11 +155,12 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       $http.post('/api/sendMails', { content: $scope.htmlcontent, projectName: $scope.projectName, replyTo: currentUser.email, name: currentUser.name});
     };
 
-
     $scope.saveNotes = function() {
       if($scope.htmlcontent === '' || $scope.projectName === undefined) {
         return;
       }
+
+      // create a variable to get today's date.
       var today = new Date();
       var dd = today.getDate();
       var mm = today.getMonth()+1;
@@ -172,6 +175,8 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
 
       today = yyyy+'/'+mm+'/'+dd;
 
+
+      // for creating projects and meeting notes... first iteration for seeding data
       if ($window.project_id === undefined) {
         $http.post('/api/projects', { user: currentUser._id, name: $scope.projectName, Startdate: today}).
         success(function(data, status, headers, config) {

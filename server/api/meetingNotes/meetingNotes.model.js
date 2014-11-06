@@ -6,6 +6,7 @@ var mongoose = require('mongoose'),
 var MeetingnotesSchema = new Schema({
   project: { type: Schema.Types.ObjectId, ref: 'Project' },
   user: { type: Schema.Types.ObjectId, ref: 'User' },
+  contacts: [ { type: Schema.Types.ObjectId, ref: 'Contact'}, {type: Boolean}],
   notes: String,
   date: Date
 });

@@ -134,3 +134,16 @@ exports.updateProjects = function(req, res) {
     });
   });
 };
+
+exports.getContacts = function (req, res, next) {
+  var userId = req.params.id;
+  console.log("got to getContacts");
+
+  User.findById(userId)
+  .populate(contacts)
+  .exec(function (err, contacts) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+    res.json(contacts);
+  });
+};
