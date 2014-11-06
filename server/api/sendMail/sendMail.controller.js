@@ -34,7 +34,7 @@ exports.create = function(req, res) {
     service: 'Gmail',
     auth: {
         user: 'suiteproductivity@gmail.com',
-        pass: 'fullSt@ck123'
+        pass: ''
     }
   });
 
@@ -43,7 +43,7 @@ exports.create = function(req, res) {
       from: req.body.name + ' ✔ ' + req.body.replyTo,  // 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
       replyTo: req.body.replyTo,  // 'martinebutler@gmail.com',
       to: 'martinebutler@gmail.com', // list of receivers
-      subject: req.body.projectName + ' ✔',  // '✔ ' + req.body.projectName, // Subject line
+      subject: req.body.projectName.name + ' ✔',  // '✔ ' + req.body.projectName, // Subject line
       // text: 'Hello world ✔', // plaintext body
       html: req.body.content //'<b>Hello world ✔</b>' // html body
   };

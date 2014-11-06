@@ -101,10 +101,19 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       html: true
     });
   })
+
+  // for the drop down menu for previous projects
+  .config(function($selectProvider) {
+    angular.extend($selectProvider.defaults, {
+      animation: 'am-flip-x',
+      placeholder: 'Select Previous Project'
+      // sort: false
+    });
+  })
   
   .controller('demoController', function($scope, $http, $aside, $window) {
     $scope.orightml = '<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/j7_lSP8Vc3o" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
-    $scope.htmlcontent = $scope.orightml;
+    $scope.htmlcontent = ''; // $scope.orightml;
     $scope.disabled = false;
 
     var currentUser = $window.currentUser;
@@ -115,9 +124,6 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
           console.log(data);
           $scope.projectData = data;
         });
-
-        
-
       // projectObjs.push()
     // });
 
