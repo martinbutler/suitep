@@ -71,19 +71,21 @@ angular.module('userdetails', [] )
       container.extendState({ tUser: tUser });
       $scope.$apply();
     });
-
+    $scope.actionItems =[];
     container.layoutManager.eventHub.on( 'projectName', function( projectName ){
-      $scope.users = [];
+      $scope.actionItems = [];
             // projectName.contacts.forEach(function(contact_id) {
-        $http.get('api/projects/contacts/'+projectName._id).
+        $http.get('api/projects/actions/'+projectName._id).
           success(function(data, status, headers, config) {
-            // $scope.users.push( {name: data.name});
-            $scope.projectData = data;
+            console.log("dataAI:", data);
+            $scope.ActionItems = data;
             $scope.projectName = projectName;
             container.extendState({ projectName: projectName });
             data.forEach(function(obj) {
-              $scope.users.push({name: obj.name})
+              $scope.actionItems.push({name: obj.name})
             });
+            $scope.actionItems = data;
+            console.log("$.ai:", $scope.actionItems);
             
           });
          $scope.$apply(); 
@@ -213,7 +215,10 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
                                         owner: $scope.actItemOwner._id})
       .success(function(data, status, headers, config) {
         $scope.actItemTxt = '';
-        $http.put('/api/projects/updateActionItem/'+$window.project_id, { actionItems: data._id});
+        $http.put('/api/projects/updateActionItem/'+$scope.projectName._id, { actionItems: data._id}).
+          success(function(data, status, headers, config) {
+            container.layoutManager.eventHub.emit( 'projectName', $scope.projectName );
+          });
       });
 
 

@@ -5,6 +5,12 @@ angular.module('suitePApp')
     $scope.menu = [{
       'title': 'Home',
       'link': '/'
+    }, {
+      'title': 'Take Notes',
+      'link': '/notesDashboard'
+    }, {
+      'title': 'View Projects',
+      'link': '/projectDashboard'
     }];
 
     $scope.isCollapsed = true;

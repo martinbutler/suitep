@@ -48,7 +48,6 @@ exports.create = function(req, res) {
 
 // Updates an existing project in the DB.
 exports.update = function(req, res) {
-  console.log("got to update in projects");
   if(req.body._id) { delete req.body._id; }
   Project.findById(req.params.id, function (err, project) {
     if (err) { return handleError(res, err); }
@@ -62,14 +61,10 @@ exports.update = function(req, res) {
 };
 
 exports.updateMeetings = function(req, res) {
-  console.log("start of update meetings: req:", req.body);
-  console.log("start of update meetings: req_id:", req.body._id);
   if(req.body._id) { delete req.body._id; }
   Project.findById(req.params.id, function (err, project) {
     if (err) { return handleError(res, err); }
     if(!project) { return res.send(404); }
-    console.log("req:", req.body);
-    console.log("project", project);
     project.meetingNotes.push(req.body.meetingNotes);
     project.save(function (err) {
       if (err) { return handleError(res, err); }
@@ -79,15 +74,11 @@ exports.updateMeetings = function(req, res) {
 };
 
 exports.updateActions = function(req, res) {
-  console.log("start of update meetings: req:", req.body);
-  console.log("start of update meetings: req_id:", req.body._id);
   if(req.body._id) { delete req.body._id; }
   Project.findById(req.params.id, function (err, project) {
     if (err) { return handleError(res, err); }
     if(!project) { return res.send(404); }
-    console.log("req:", req.body);
-    console.log("project", project);
-    project.actionItems.push(req.body.actionItem);
+    project.actionItems.push(req.body.actionItems);
     project.save(function (err) {
       if (err) { return handleError(res, err); }
       return res.json(200, project);
@@ -110,36 +101,26 @@ exports.destroy = function(req, res) {
 // get contacts
 exports.getContacts = function (req, res, next) {
   var projectId = req.params.id;
-  console.log("got to getContacts in project");
-
   Project.findById(projectId)
   .populate('contacts')
   .exec(function (err, contacts) {
     if (err) return next(err);
     if (!contacts) return res.send(401);
-    console.log(contacts.contacts);
     res.json(contacts.contacts);
   });
 };
-// exports.show = function(req, res) {
-//   Project.find(req.params.id, function (err, project) {
-//     if(err) { return handleError(res, err); }
-//     if(!project) { return res.send(404); }
-//     return res.json(project);
-//   });
-// };
-// exports.getContacts = function (req, res, next) {
-//   var userId = req.params.id;
-//   console.log("got to getContacts");
-
-//   User.findById(userId)
-//   .populate(contacts)
-//   .exec(function (err, contacts) {
-//     if (err) return next(err);
-//     if (!user) return res.send(401);
-//     res.json(contacts);
-//   });
-// };
+// get action items
+exports.getActions = function (req, res, next) {
+  var projectId = req.params.id;
+  Project.findById(projectId)
+  .populate('actionItems')
+  .exec(function (err, aItem) {
+    if (err) return next(err);
+    if (!aItem) return res.send(401);
+    console.log(aItem);
+    res.json(aItem.actionItems);
+  });
+};
 
 function handleError(res, err) {
   return res.send(500, err);

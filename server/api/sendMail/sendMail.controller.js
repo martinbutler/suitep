@@ -40,10 +40,10 @@ exports.create = function(req, res) {
 
   // setup e-mail data with unicode symbols
   var mailOptions = {
-      from: req.body.name + ' ✔ ' + req.body.replyTo,  // 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
+      from: req.body.name + ' ✔ ★ ' + req.body.replyTo,  // 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
       replyTo: req.body.replyTo,  // 'martinebutler@gmail.com',
       to: 'martinebutler@gmail.com', // list of receivers
-      subject: req.body.projectName.name + ' ✔',  // '✔ ' + req.body.projectName, // Subject line
+      subject: req.body.projectName.name + ' ✔ ★',  // '✔ ' + req.body.projectName, // Subject line
       // text: 'Hello world ✔', // plaintext body
       html: req.body.content //'<b>Hello world ✔</b>' // html body
   };

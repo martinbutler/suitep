@@ -15,5 +15,6 @@ router.delete('/:id', controller.destroy);
 router.put('/updateMeeting/:id', controller.updateMeetings);
 router.put('/updateActionItem/:id', controller.updateActions);
 router.get('/contacts/:id', controller.getContacts);
+router.get('/actions/:id', controller.getActions);
 
 module.exports = router;
