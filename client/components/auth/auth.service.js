@@ -29,6 +29,8 @@ angular.module('suitePApp')
           $cookieStore.put('token', data.token);
           currentUser = User.get();
           deferred.resolve(data);
+          currentUser = User.get();
+          $window.currentUser = currentUser;
           return cb();
         }).
         error(function(err) {

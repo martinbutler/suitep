@@ -12,4 +12,7 @@ router.put('/:id', controller.update);
 router.patch('/:id', controller.update);
 router.delete('/:id', controller.destroy);
 
+router.post('/sendTask', controller.sendTask);
+router.post('/sendUpdate', controller.sendUpdate);
+
 module.exports = router;

@@ -176,8 +176,9 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
 
     // load the project names into selector.
     // currentUser.projects.forEach(function(project_id) {
-      $http.get('api/projects/'+currentUser.projects).
+      $http.get('api/users/projects/'+currentUser._id).
         success(function(data, status, headers, config) {
+          console.log(data);
           $scope.projectData = data;
         });
       // projectObjs.push()
@@ -214,13 +215,24 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
                                         user: $scope.projectName.user,
                                         owner: $scope.actItemOwner._id})
       .success(function(data, status, headers, config) {
-        $scope.actItemTxt = '';
         $http.put('/api/projects/updateActionItem/'+$scope.projectName._id, { actionItems: data._id}).
           success(function(data, status, headers, config) {
             container.layoutManager.eventHub.emit( 'projectName', $scope.projectName );
           });
-      });
 
+        $http.post('api/sendMails/sendTask/', {title: $scope.actItemTitle,
+                                              description: $scope.actItemTxt,
+                                              dueDate: $scope.actItemDueDate,
+                                              projectName: $scope.projectName.name,
+                                              user: $window.currentUser.name,
+                                              ownerEmail: $scope.actItemOwner.email,
+                                              owner: $scope.actItemOwner.name,
+                                              actItemID: data._id}).
+          success(function(data, status, headers, config) {
+            $scope.actItemTxt = '';
+          });
+        });
+      
 
     };
 

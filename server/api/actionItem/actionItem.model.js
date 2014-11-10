@@ -7,6 +7,8 @@ var ActionitemSchema = new Schema({
   title: String,
   description: String,
   dueDate: Date,
+  completed: {type: Boolean, default: false },
+  completionDate: Date,
   owner: {type: Schema.Types.ObjectId, ref: 'Contact' },
   updates: [ String, Date ],
   user: { type: Schema.Types.ObjectId, ref: 'User' },

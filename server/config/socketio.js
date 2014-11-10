@@ -18,6 +18,7 @@ function onConnect(socket) {
   });
 
   // Insert sockets below
+  require('../api/cronJobs/cronJobs.socket').register(socket);
   require('../api/contact/contact.socket').register(socket);
   require('../api/project/project.socket').register(socket);
   require('../api/actionItem/actionItem.socket').register(socket);

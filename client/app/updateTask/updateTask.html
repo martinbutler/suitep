@@ -1,0 +1,47 @@
+<!-- <div ng-include="'components/navbar/navbar.html'"></div> -->
+
+<header class="hero-unit" id="banner">
+  <div class="container">
+    <h1>Welcome {{ownerName}}</h1>
+    <p class="lead">Please update your task below</p>
+    <!-- <img src="assets/images/yeoman.png" alt="I'm Yeoman"> -->
+  </div>
+</header>
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">Project: {{projectName}}</h1>
+    </div>
+  </div>
+
+<div> 
+  <h3>Action Item: {{title}}</h3>
+  <p><strong>Descprition:</strong> {{description}}</p>
+  <p><strong>Due Date:</strong> {{dueDate}}</p>
+  <ul ng-repeat="update in updates">
+        <ul><strong>Update {{$index + 1}}:</strong> {{update}}</ul>
+      </ul>
+      <ul ng-show="newUpdate">New Update: {{newUpdate}}</ul>
+
+  <form class="update-form">
+    <label>New Update</label>
+    <p class="input-group">
+      <input type="text" class="form-control" placeholder="Enter your new update here or click Mark Task Completed below" ng-model="newUpdate">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-primary" ng-click="addUpdate()">Submit Update</button>    
+      </span> 
+
+    </p> 
+    <button type="submit" class="btn btn-primary fa fa-check" ng-model="htmlcontent" ng-click="taskCompleted()"><i></i> Mark Task Completed</button>
+  </form>
+
+</div>
+
+<footer class="footer">
+  <div class="container">
+      <p>Suite Productivity v0.0.01 |
+        <a href="https://twitter.com/martyebutler">@martyebutler</a> |
+         <!-- <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a> --></p>
+  </div>
+</footer>

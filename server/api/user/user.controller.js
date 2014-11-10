@@ -147,3 +147,16 @@ exports.getContacts = function (req, res, next) {
     res.json(contacts);
   });
 };
+
+exports.getProjects = function (req, res, next) {
+  var userId = req.params.id;
+  console.log("got to getProjects");
+
+  User.findById(userId)
+  .populate('projects')
+  .exec(function (err, projects) {
+    if (err) return next(err);
+    // if (!projects) return res.send(401);
+    res.json(projects.projects);
+  });
+};
