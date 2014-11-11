@@ -29,7 +29,6 @@ exports.show = function(req, res) {
 //   });
 // };
 exports.create = function(req, res) {
-  console.log('i req the body:', req.body);
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -61,7 +60,6 @@ exports.create = function(req, res) {
 };
 
 exports.sendTask = function(req, res) {
-  console.log('i req the body:', req.body);
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -79,7 +77,7 @@ exports.sendTask = function(req, res) {
       // text:   // plaintext body
       text: 'Hello ' + req.body.owner + ',\n\nProject: ' + req.body.projectName + '\nAction Item: ' 
             + req.body.title +':\nDescription: ' + req.body.description + '\n\nDue Date: ' + Date(req.body.dueDate) 
-            + '\n\nProdive update: http://localhost:9000/updateTask/' + req.body.actItemID //'<b>Hello world ✔</b>' // html body
+            + '\n\nProvide an update: http://localhost:9000/updateTask/' + req.body.actItemID //'<b>Hello world ✔</b>' // html body
   };
 
   // send mail with defined transport object
@@ -95,7 +93,6 @@ exports.sendTask = function(req, res) {
 };
 
 exports.sendUpdate = function(req, res) {
-  console.log('sendupdate req the body:', req.body);
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
@@ -112,7 +109,7 @@ exports.sendUpdate = function(req, res) {
       subject: ' ★ ' + 'Task Update for: ' + req.body.projectName,  
       text: 'Hello ' + req.body.user + ',\n\nProject: ' + req.body.projectName + '\nAction Item: ' 
             + req.body.title +':\nDescription: ' + req.body.description + '\n\nDue Date: ' + Date(req.body.dueDate) 
-            + '\n\n' + req.body.user  + ' prodived the follwoing update: ' + req.body.updateTxt //'<b>Hello world ✔</b>' // html body
+            + '\n\n' + req.body.user  + ' prodived the follwoing update:\n     ' + req.body.updateTxt //'<b>Hello world ✔</b>' // html body
   };
 
   // send mail with defined transport object

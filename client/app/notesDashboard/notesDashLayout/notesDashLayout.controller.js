@@ -12,13 +12,7 @@ angular.module('userlist', [])
   .controller('userlistCtrl', function( $scope, $timeout, container, state, $window, $http) {
     var selectedUser = {};
 
-    $scope.users = [
-      // { name: 'Jackson Turner', street: '217 Tawny End', img: 'men_1.jpg' },
-      // { name: 'Megan Perry', street: '77 Burning Ramp', img: 'women_1.jpg' },
-      // { name: 'Ryan Harris', street: '12 Hazy Apple Route', img: 'men_2.jpg' },
-      // { name: 'Jennifer Edwards', street: '33 Maple Drive', img: 'women_2.jpg' },
-      // { name: 'Noah Jenkins', street: '423 Indian Pond Cape', img: 'men_3.jpg' }
-    ];
+    $scope.users = [];
 
     // $timeout(function(){
     //   $scope.select( $scope.users[ state.selectedUserIndex ] );
@@ -33,20 +27,27 @@ angular.module('userlist', [])
       container.extendState({ selectedUserIndex: $scope.users.indexOf( user ) });
       container.layoutManager.eventHub.emit( 'userSelected', user );
       container.layoutManager.eventHub.emit( 'testCurrentUser', currentUser );
+
+      //  container.layoutManager.eventHub.on( 'projectName', function( newProjectName ){
+      //   $scope.projectName = newProjectName;
+      //   // container.extendState({ projectName: projectName });
+      //   // $scope.$apply();
+      // });
+      // container.layoutManager.eventHub.emit( 'projectData', projectData );
     };
 
     container.layoutManager.eventHub.on( 'projectName', function( projectName ){
-      $scope.users = [];
+      $scope.users = {};
+      $scope.projectData = {};
+
             // projectName.contacts.forEach(function(contact_id) {
         $http.get('api/projects/contacts/'+projectName._id).
           success(function(data, status, headers, config) {
             // $scope.users.push( {name: data.name});
             $scope.projectData = data;
             $scope.projectName = projectName;
+            $scope.users = data;
             container.extendState({ projectName: projectName });
-            data.forEach(function(obj) {
-              $scope.users.push({name: obj.name})
-            });
             
           });
          $scope.$apply(); 
@@ -77,7 +78,6 @@ angular.module('userdetails', [] )
             // projectName.contacts.forEach(function(contact_id) {
         $http.get('api/projects/actions/'+projectName._id).
           success(function(data, status, headers, config) {
-            console.log("dataAI:", data);
             $scope.ActionItems = data;
             $scope.projectName = projectName;
             container.extendState({ projectName: projectName });
@@ -85,7 +85,7 @@ angular.module('userdetails', [] )
               $scope.actionItems.push({name: obj.name})
             });
             $scope.actionItems = data;
-            console.log("$.ai:", $scope.actionItems);
+            container.layoutManager.eventHub.emit( 'actionItems', $scope.actionItems );
             
           });
          $scope.$apply(); 
@@ -155,14 +155,25 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
   })
   
   .controller('demoController', function($scope, $http, $aside, $window, container) {
-    $scope.orightml = '<p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/j7_lSP8Vc3o" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><b>Features:</b></p><ol><li>Automatic Seamless Two-Way-Binding</li><li style="color: blue;">Super Easy <b>Theming</b> Options</li><li>Simple Editor Instance Creation</li><li>Safely Parses Html for Custom Toolbar Icons</li><li>Doesn&apos;t Use an iFrame</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p>';
+    $scope.orightml = '<h4>Suite Productivity Meeting and Task Tracker</h4><p><b>Features:</b></p><ol><li>Take notes in a text editor</li><li>Uses Golden Layout to allow for pop windows, themes, and user controlled layouts.</li><li>Send meeting notes to team members</li><li style="color: blue;">Create Action Items and send email to assignees</li><li>Send Daily Status of open Action Items Manager/Project Lead</li><li>Send action item reminders to task owner of upcoming due dates</li><li>Works with Firefox, Chrome, and IE8+</li></ol><p><b>Text Editor Code at GitHub:</b> <a href="https://github.com/fraywing/textAngular">Here</a> </p><p><b>Golden Layout Code at GitHub:</b> <a href="https://github.com/hoxton-one/golden-layout">Here</a></p><p><b>Node Cron Code at GitHub:</b> <a href="https://github.com/ncb000gt/node-cron">Here</a></p><p></p><p><b>Node Mailer Code at GitHub:</b> <a href="https://github.com/andris9/Nodemailer">Here</a></p><p></p><p><img class="ta-insert-video" ta-insert-video="http://www.youtube.com/embed/Cgovv8jWETM" src="" allowfullscreen="true" width="300" frameborder="0" height="250"/></p><p><br/></p>';
     $scope.htmlcontent = ''; // $scope.orightml;
     $scope.disabled = false;
+    // $scope.projectName = {};
+
+    container.layoutManager.eventHub.on( 'actionItems', function( actionItems ){
+      $scope.actionItems = actionItems;
+      container.extendState({ actionItems: actionItems });
+      $scope.$apply();
+    });
+    container.layoutManager.eventHub.on( 'projectName', function( newProjectName ){
+      $scope.projectName = newProjectName;
+      // container.extendState({ projectName: projectName });
+      // $scope.$apply();
+    });
 
     $scope.$watch('projectName', function() {
         if ($scope.projectName) {
           container.layoutManager.eventHub.emit( 'projectName', $scope.projectName );
-          
           $http.get('api/projects/contacts/'+$scope.projectName._id).
             success(function(data, status, headers, config) {
               $scope.projectTeam = data;
@@ -178,11 +189,8 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
     // currentUser.projects.forEach(function(project_id) {
       $http.get('api/users/projects/'+currentUser._id).
         success(function(data, status, headers, config) {
-          console.log(data);
           $scope.projectData = data;
         });
-      // projectObjs.push()
-    // });
 
     // make actionable button functionality
     $scope.actionItemTextSet = function() {
@@ -202,6 +210,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
 
     // for the pop action item creator
     $scope.modal = {title: 'Action Item Creator', content: 'Add your Action Item Title, Assignee, and update Description'};
+    $scope.newProjectModal = {title: 'Start New Project', content: 'temp hold - tbd'};
     
     $scope.actItemOwner;
     $scope.createActionItem = function() {
@@ -213,7 +222,9 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
                                         dueDate: $scope.actItemDueDate,
                                         project: $scope.projectName._id,
                                         user: $scope.projectName.user,
-                                        owner: $scope.actItemOwner._id})
+                                        owner: $scope.actItemOwner._id,
+                                        ownerEmail: $scope.actItemOwner.email,
+                                        ownerName: $scope.actItemOwner.name})
       .success(function(data, status, headers, config) {
         $http.put('/api/projects/updateActionItem/'+$scope.projectName._id, { actionItems: data._id}).
           success(function(data, status, headers, config) {
@@ -232,8 +243,17 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
             $scope.actItemTxt = '';
           });
         });
-      
+    };
 
+    $scope.createNewProject = function() {
+      var projectTemp;
+      $http.post('api/projects/', { name: $scope.newProjectName, user: currentUser._id, startDate: (new Date()), userEmail: currentUser.email }).
+        success(function(data, status, headers, config) {
+          // projectTemp = data;
+          $scope.projectName = data;
+          $http.put('/api/users/project/'+currentUser._id, {project: data._id});
+        });
+      
     };
 
     // consider using a factory for call back success.
@@ -241,7 +261,40 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       if($scope.htmlcontent === '' || $scope.projectName === undefined) {
         return;
       }
-      $http.post('/api/sendMails', { content: $scope.htmlcontent, projectName: $scope.projectName, replyTo: currentUser.email, name: currentUser.name});
+      var emailContent = '<h1>Project: ' + $scope.projectName.name + '</h1>' 
+                          + '<h4>__________________________________________________________________________________</h4>'
+                          + '<h2>Project Team:</h2><ul>';
+      $scope.projectTeam.forEach(function(obj) {
+        emailContent += '<li><a href="mailto:' + obj.email + '?subject=' + $scope.projectName.name + '">' + obj.name + '</a></li>'; 
+      });
+      emailContent += '</ul>' 
+                  + '<h4>__________________________________________________________________________________</h4>'
+                  + '<h2>Meeting Notes:</h2>'
+                  + $scope.htmlcontent
+                  + '<h4>__________________________________________________________________________________</h4>'
+                  + '<h2>Open Actions Items:</h2>';
+      var openActionNumber = 0;
+      // var count = 0;
+      $scope.actionItems.forEach(function (aIobj) {
+
+        if(!aIobj.completed) {
+          openActionNumber++;
+          var aiDueDate = new Date(aIobj.dueDate);
+          emailContent += '<p>' + openActionNumber + ') Title: <strong>' + aIobj.title + '</strong></p>'
+                        + '<p>Description: ' + aIobj.description + '</p>'
+                        + '<p>Due Date: ' + (aiDueDate.getMonth()+1) + '/' + (aiDueDate.getDate()) + '/' + (aiDueDate.getFullYear()) + '</p>'
+                        + '<p>Owner: <a href="mailto:' + aIobj.ownerEmail + '?subject=' + aIobj.title + '">' 
+                          + aIobj.ownerName +'</a></p>';
+          if (aIobj.updates.length > 0) {
+            emailContent += '<p>Last Update ' + aIobj.updates[aIobj.updates.length-1] + '</p>';
+          } 
+        }
+      });
+      setTimeout(function(){
+        $http.post('/api/sendMails', { content: emailContent, projectName: $scope.projectName, 
+                                      replyTo: currentUser.email, name: currentUser.name, 
+                                      actionItems: $scope.actionItems, projectTeam: $scope.projectTeam});
+      }, 500);
     };
 
 

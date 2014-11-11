@@ -9,7 +9,8 @@ var ProjectSchema = new Schema({
   startDate: Date,
   meetingNotes: [{ type: Schema.Types.ObjectId, ref: 'Meetingnotes' }],
   actionItems: [{ type: Schema.Types.ObjectId, ref: 'Actionitem' }],
-  contacts: [{ type: Schema.Types.ObjectId, ref: 'Contact'}]
+  contacts: [{ type: Schema.Types.ObjectId, ref: 'Contact'}],
+  userEmail: String
 });
 
 module.exports = mongoose.model('Project', ProjectSchema);

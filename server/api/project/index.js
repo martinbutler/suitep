@@ -17,5 +17,6 @@ router.put('/updateActionItem/:id', controller.updateActions);
 router.get('/contacts/:id', controller.getContacts);
 // router.get('/userProjects/:id', controller.getUserProjects);
 router.get('/actions/:id', controller.getActions);
+router.get('/user/:id', controller.getUser);
 
 module.exports = router;

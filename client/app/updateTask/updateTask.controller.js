@@ -19,38 +19,37 @@ angular.module('suitePApp')
             $scope.title = actionData.title;
             $scope.description = actionData.description;
             $scope.dueDate = Date(actionData.dueDate);
-            console.log("actionsItems", data);
             $http.get('api/contacts/'+actionData.owner).
               success(function(data, status, headers, config) {
-                console.log("contacts", data);
                 $scope.ownerName = data.name;
                 $scope.ownerEmail = data.email;
               });
             $http.get('api/projects/'+actionData.project).
-              
               success(function(data, status, headers, config) {
-                console.log("projects", data);
                 $scope.projectName = data.name;
+                $http.get('api/users/'+data.user).
+                  success(function(data, status, headers, config) {
+                    
+                  })
               });
-
-            if (actionData.updates > 0) {
+            console.log(actionData);
+            if (actionData.updates.length > 0) {
               $scope.updates = actionData.updates;
-            }  else {
-              console.log('test');
-              $scope.updates = ['date line 1', '2nd update'];
             }
+            $scope.isCompleted = actionData.completed;
             
           });
 
     
     $scope.addUpdate = function() {
+      console.log('ding');
       if($scope.newUpdate === '') {
         return;
       }
 
       var updateTxt = today + ': ' + $scope.newUpdate;
 
-      $http.put('/api/actionItems/'+actionData._id, {update: updateTxt}).
+      $http.put('/api/actionItems/updateUpdates/'+actionData._id, {update: updateTxt, completed: false}).
         success(function(data, status, headers, config) {
           $http.post('api/sendMails/sendUpdate/', {title: $scope.title,
                                               description: $scope.description,
@@ -65,7 +64,31 @@ angular.module('suitePApp')
 
         }) 
 
-   
+    $scope.updateMade = true;
+    };
+
+    $scope.taskCompleted = function() {
+      var updateTxt = 'CLOSED: ' + today + ':';
+      if($scope.newUpdate !== '') {
+        updateTxt += ' ' +$scope.newUpdate;
+      } 
+
+      $http.put('/api/actionItems/updateUpdates/'+actionData._id, {update: updateTxt, completed: true}).
+        success(function(data, status, headers, config) {
+          $http.post('api/sendMails/sendUpdate/', {title: $scope.title,
+                                              description: $scope.description,
+                                              dueDate: $scope.dueDate,
+                                              projectName: $scope.projectName,
+                                              updateTxt: updateTxt,
+                                              user: $window.currentUser.name,
+                                              userEmail: $window.currentUser.email,
+                                              ownerEmail: $scope.ownerEmail,
+                                              owner: $scope.ownerName,
+                                              actItemID: data._id});
+
+        }) 
+
+    $scope.updateMade = true;
     };
   });
 

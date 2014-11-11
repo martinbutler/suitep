@@ -9,7 +9,6 @@ var errors = require('./components/errors');
 module.exports = function(app) {
 
   // Insert routes below
-  app.use('/api/cronJobss', require('./api/cronJobs'));
   app.use('/api/contacts', require('./api/contact'));
   app.use('/api/projects', require('./api/project'));
   app.use('/api/actionItems', require('./api/actionItem'));

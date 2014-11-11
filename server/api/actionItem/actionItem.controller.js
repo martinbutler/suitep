@@ -54,6 +54,20 @@ exports.destroy = function(req, res) {
   });
 };
 
+exports.updateUpdates = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Actionitem.findById(req.params.id, function (err, actionItem) {
+    if (err) { return handleError(res, err); }
+    if(!actionItem) { return res.send(404); }
+    actionItem.updates.push(req.body.update);
+    actionItem.completed = req.body.completed;
+    actionItem.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, actionItem);
+    });
+  });
+};
+
 function handleError(res, err) {
   return res.send(500, err);
 }

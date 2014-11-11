@@ -2,20 +2,23 @@
 
 <header class="hero-unit" id="banner">
   <div class="container">
-    <h1>Welcome {{ownerName}}</h1>
-    <p class="lead">Please update your task below</p>
+    <h1 ng-hide="updateMade || isCompleted">Welcome {{ownerName}}</h1>
+    <p ng-hide="updateMade || isCompleted" class="lead">Please update your task below</p>
+    <h1 ng-show="updateMade || isCompleted">Thank You {{ownerName}}!</h1>
+    <p ng-show="updateMade" class="lead">The task has been updated!</p>
+    <p ng-show="isCompleted" class="lead">The task has already been closed!</p>
     <!-- <img src="assets/images/yeoman.png" alt="I'm Yeoman"> -->
   </div>
 </header>
 
-<div class="container">
-  <div class="row">
+<div Nclass="container">
+  <div ng-hide="updateMade || isCompleted"  class="row">
     <div class="col-lg-12">
       <h1 class="page-header">Project: {{projectName}}</h1>
     </div>
   </div>
 
-<div> 
+<div ng-hide="updateMade || isCompleted"> 
   <h3>Action Item: {{title}}</h3>
   <p><strong>Descprition:</strong> {{description}}</p>
   <p><strong>Due Date:</strong> {{dueDate}}</p>
@@ -36,6 +39,9 @@
     <button type="submit" class="btn btn-primary fa fa-check" ng-model="htmlcontent" ng-click="taskCompleted()"><i></i> Mark Task Completed</button>
   </form>
 
+</div>
+<div ng-show="updateMade">
+  <img src="assets/images/icon_32443.png" style="width:auto;height:480px;margin-left:25%">
 </div>
 
 <footer class="footer">

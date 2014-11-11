@@ -16,7 +16,7 @@ This is the managerDashboard view.
           Action <span class="caret"></span>
         </button> 
         <span ng-hide="projectName.name"> or&nbsp;</span>
-        <button data-animation="am-fade-and-scale" data-template="app/notesDashboard/createActionItem.html" bs-modal="modal" ng-hide="projectName.name" type="submit" class="btn btn-success">Start New Project</button>
+        <button data-animation="am-fade-and-scale" data-template="app/notesDashboard/createNewProject.html" bs-modal="newProjectModal" ng-hide="projectName.name" type="submit" class="btn btn-success">Start New Project</button>
       
     
 
@@ -56,7 +56,13 @@ This is the managerDashboard view.
           ng-class="{selected:user.isSelected}">
         {{user.name}}
       </li>
-    </ul>   
+    </ul>
+    <div>
+      <label>Select Project Team:&nbsp;</label>
+      <button type="button" class="btn btn-default" ng-model="projectData" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="project as project.name for project in projectData" bs-select> 
+        Action <span class="caret"></span> 
+      </button>
+    </div>   
   </template>
 
   <template type="text/html" id="userDetailTemplate">

@@ -12,7 +12,9 @@ var ActionitemSchema = new Schema({
   owner: {type: Schema.Types.ObjectId, ref: 'Contact' },
   updates: [ String, Date ],
   user: { type: Schema.Types.ObjectId, ref: 'User' },
-  project: { type: Schema.Types.ObjectId, ref: 'Project' }
+  project: { type: Schema.Types.ObjectId, ref: 'Project' },
+  ownerName: String,
+  ownerEmail: String
 });
 
 module.exports = mongoose.model('Actionitem', ActionitemSchema);

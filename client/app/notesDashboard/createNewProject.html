@@ -1,0 +1,26 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" ng-show="title">
+        <button type="button" class="close" ng-click="$hide()">&times;</button>
+        <h3 class="modal-title" ng-bind-html="title"></h3>
+      </div>
+        <div class="modal-body" ng-controller="demoController" ng-show="content">
+
+        
+          <h5>Enter the new Project Name:</h5>
+          <input class="fillWidth" type="text" ng-model="newProjectName" name="text" autofocus/>
+          
+         <!--  <h4>LEAVE: add dropdown for assignee</h4>
+          <p>This <a href="#" role="button" class="btn btn-default popover-test" data-title="A Title" data-content="And here's some amazing content. It's very engaging. right?" bs-popover>button</a> should trigger a popover on click.</p>
+   -->         
+          <br>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" ng-click="$hide()">Cancel</button>
+          <button type="button" class="btn btn-primary" ng-click="createNewProject(); $hide()">Create Project</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

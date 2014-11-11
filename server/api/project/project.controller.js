@@ -123,6 +123,19 @@ exports.getActions = function (req, res, next) {
   });
 };
 
+exports.getUser = function (req, res, next) {
+  var projectId = req.params.id;
+  Project.findById(projectId)
+  .populate('actionItems')
+  .exec(function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+    console.log(user.user);
+    console.log('******************************');
+    res.json(user.user.name);
+  });
+};
+
 function handleError(res, err) {
   return res.send(500, err);
 }
