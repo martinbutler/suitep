@@ -8,7 +8,21 @@ angular.module('suitePApp')
 
 
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-angular.module('userlist', [])
+angular.module('userlist', ['mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
+
+  .config(function($selectProvider) {
+    angular.extend($selectProvider.defaults, {
+      animation: 'am-flip-x',
+      sort: false
+    });
+  })
+  // .config(function($selectProvider) {
+  //   angular.extend($selectProvider.defaults, {
+  //     all-none-buttons: true
+  //   });
+  // })
+
+
   .controller('userlistCtrl', function( $scope, $timeout, container, state, $window, $http) {
     var selectedUser = {};
 
@@ -48,10 +62,25 @@ angular.module('userlist', [])
             $scope.projectName = projectName;
             $scope.users = data;
             container.extendState({ projectName: projectName });
-            
+
+            $http.get('api/users/contacts/'+currentUser._id).
+              success(function(data, status, headers, config) {
+                console.log('data from contacts call', data);
+                $scope.allContacts = data;
+              })
           });
          $scope.$apply(); 
     });
+
+    $scope.setTeam = function() {
+      console.log($scope.users);
+      $scope.users.forEach(function(obj) {
+        console.log(obj);
+        $http.put('/api/projects/contacts/'+$scope.projectName._id, {contact: obj._id});
+
+      })
+
+    };
 
   });
 
@@ -336,6 +365,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
         $http.put('/api/meetingNotess/'+$window.meetingNote_id, { notes: $scope.htmlcontent});
       }
     }; // end of saveNotes
+
   });
 
 

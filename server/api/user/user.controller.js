@@ -140,11 +140,11 @@ exports.getContacts = function (req, res, next) {
   console.log("got to getContacts");
 
   User.findById(userId)
-  .populate(contacts)
+  .populate('contacts')
   .exec(function (err, contacts) {
     if (err) return next(err);
-    if (!user) return res.send(401);
-    res.json(contacts);
+    if (!contacts) return res.send(401);
+    res.json(contacts.contacts);
   });
 };
 

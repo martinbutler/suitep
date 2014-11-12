@@ -87,6 +87,19 @@ exports.updateActions = function(req, res) {
   });
 };
 
+exports.updateContacts = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  Project.findById(req.params.id, function (err, project) {
+    if (err) { return handleError(res, err); }
+    if(!project) { return res.send(404); }
+    project.contacts.push(req.body.contact);
+    project.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, project);
+    });
+  });
+};
+
 // Deletes a project from the DB.
 exports.destroy = function(req, res) {
   Project.findById(req.params.id, function (err, project) {

@@ -14,6 +14,7 @@ router.delete('/:id', controller.destroy);
 
 router.put('/updateMeeting/:id', controller.updateMeetings);
 router.put('/updateActionItem/:id', controller.updateActions);
+router.put('/contacts/:id', controller.updateContacts);
 router.get('/contacts/:id', controller.getContacts);
 // router.get('/userProjects/:id', controller.getUserProjects);
 router.get('/actions/:id', controller.getActions);

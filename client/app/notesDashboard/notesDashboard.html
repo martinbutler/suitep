@@ -44,24 +44,30 @@ This is the managerDashboard view.
   </template>
 
   <template type="text/html" id="userlistTemplate">
-    <ul ng-controller="userlistCtrl" class="userlist">
-      <div ng-hide="projectName.name">
-      <br>
-        <img src="assets/images/icon_23892.png" style="width:auto;height:225px">
-        <br><br>
-        <p class="nounProject">People by Wilson Joseph from The Noun Project</p>
+    <div ng-controller="userlistCtrl" >
+
+      <ul  class="userlist">
+        <div ng-hide="projectName.name">
+        <br>
+          <img src="assets/images/icon_23892.png" style="width:auto;height:225px">
+          <br><br>
+          <p class="nounProject">People by Wilson Joseph from The Noun Project</p>
+        </div>
+        <li ng-repeat="user in users" 
+            ng-click="select( user )"
+            ng-class="{selected:user.isSelected}">
+          {{user.name}}
+        </li>
+      </ul>
+
+      <div ng-show="projectName.name">
+        <label>Select Project Team:&nbsp;</label>
+        <button type="button" class="btn btn-default" ng-model="users" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="contact as contact.name for contact in allContacts" bs-select> 
+          Action <span class="caret"></span> 
+        </button>
+        <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="setTeam()"><i class="fa fa-group"></i> Save Team</button>
       </div>
-      <li ng-repeat="user in users" 
-          ng-click="select( user )"
-          ng-class="{selected:user.isSelected}">
-        {{user.name}}
-      </li>
-    </ul>
-    <div>
-      <label>Select Project Team:&nbsp;</label>
-      <button type="button" class="btn btn-default" ng-model="projectData" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="project as project.name for project in projectData" bs-select> 
-        Action <span class="caret"></span> 
-      </button>
+
     </div>   
   </template>
 
