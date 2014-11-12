@@ -109,7 +109,7 @@ exports.sendUpdate = function(req, res) {
       subject: ' ★ ' + 'Task Update for: ' + req.body.projectName,  
       text: 'Hello ' + req.body.user + ',\n\nProject: ' + req.body.projectName + '\nAction Item: ' 
             + req.body.title +':\nDescription: ' + req.body.description + '\n\nDue Date: ' + Date(req.body.dueDate) 
-            + '\n\n' + req.body.user  + ' prodived the follwoing update:\n     ' + req.body.updateTxt //'<b>Hello world ✔</b>' // html body
+            + '\n\n' + req.body.owner  + ' prodived the following update:\n     ' + req.body.updateTxt //'<b>Hello world ✔</b>' // html body
   };
 
   // send mail with defined transport object

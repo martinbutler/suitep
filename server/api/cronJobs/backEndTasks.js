@@ -23,6 +23,12 @@ var job = new CronJob({
 
 
         if (!obj.completed && (((obj.dueDate - currentTime)/(1000 * 3600 *24)) < 1)) {
+          console.log( (obj.dueDate - currentTime)/(1000 * 3600 *24) );
+          if (((obj.dueDate - currentTime)/(1000 * 3600 *24)) < 0) {
+            txtSubject = '★URGENT★: Task IS Past Due';
+          } else {
+            txtSubject = '★REMINDER★: Task Due Tomorrow';
+          }
 
           Contact.findById(obj.owner, function (err, contact) {
             if(err) { return handleError(res, err); }
@@ -48,7 +54,8 @@ var job = new CronJob({
                   from: userEmail,  // 'Fred Foo ✔ <foo@blurdybloop.com>', // sender address
                   replyTo: userEmail,  // 'martinebutler@gmail.com',
                   to: ownerEmail, // list of receivers
-                  subject: '★REMINDER★: Task Due Tomorrow', 
+                  subject: txtSubject, 
+                  // subject: '★REMINDER★: Task Due Tomorrow', 
                   text: 'Hello ' + ownerName +',' + '\n\nProject: ' + projectName
                         + '\nTitle: ' + actionItemTitle 
                         + '\nDescription: ' + actionItemDescription 
@@ -76,7 +83,7 @@ var job = new CronJob({
 job.start();
 
 var job2 = new CronJob({
-  cronTime: '* * 4 * * *',
+  cronTime: '* * 5 * * *',
   onTick: function() {
     console.log('Job2: You will see this message once a day');
 
@@ -102,6 +109,7 @@ var job2 = new CronJob({
             var emailTxt = '\n\nProject: ' + projectName + '\n\nOpen Action Items:\n';
             var numOfActions = allActionItemsForAProject.length;
             var indexOfActions = 1;
+            var count = 1;
 
             allActionItemsForAProject.forEach(function(obj) {
               // emailTxt += indexOfActions + ') Title: ' + obj.title + '\nDescription: ' + obj.description + '\ndueDate: ' + obj.dueDate;
@@ -112,14 +120,31 @@ var job2 = new CronJob({
               .exec(function (err, owner) {
                 if(!owner) return res.send(401);
 
-                emailTxt += indexOfActions + ') Title: ' + anAction.title + '\nDescription: ' + anAction.description + '\ndueDate: ' + anAction.dueDate;
+// *************
+              // console.log('anAction.complete', anAction.completed);
+              if (!anAction.completed) {
+                emailTxt += count + ') Title: ' + anAction.title + '\nDescription: ' 
+                                + anAction.description + '\n\ndueDate: ' + anAction.dueDate;
                 emailTxt += '\nOwner: ' + owner.owner.name + '\nOwner Email: ' + owner.owner.email 
                           + '\nupdate @: http://localhost:9000/updateTask/' + obj._id + '\n\n';
+
+                // if (anAction.updates.length > 0) {
+                //   emailTxt += '\n\nLast Update: ' + anAction.updates[anAction.updates.length-1];
+                // }
+                count++;
+              } 
+              
+// *************
+
+                // emailTxt += indexOfActions + ') Title: ' + anAction.title + '\nSTATUS: ' + actionStatus + '\nDescription: ' 
+                //                 + anAction.description + '\ndueDate: ' + anAction.dueDate;
+                // emailTxt += '\nOwner: ' + owner.owner.name + '\nOwner Email: ' + owner.owner.email 
+                //           + '\nupdate @: http://localhost:9000/updateTask/' + obj._id + '\n\n';
                 // console.log(emailTxt);
-                console.log(emailTxt) // + emailTxt2);
+                // console.log(emailTxt) // + emailTxt2);
                 indexOfActions++;
-                console.log('all', numOfActions);
-                console.log('index', indexOfActions);
+                // console.log('all', numOfActions);
+                // console.log('index', indexOfActions);
                 if (numOfActions == indexOfActions) {
                   var transporter = nodemailer.createTransport({
                     service: 'Gmail',
@@ -139,14 +164,14 @@ var job2 = new CronJob({
                   };
 
                   // send mail with defined transport object
-                  // transporter.sendMail(mailOptions, function(error, info){
+                  transporter.sendMail(mailOptions, function(error, info){
                     // if(error){
                     //     console.log(error);
                     // }else{
                     //     console.log('Message sent: ' + info.response);
                     //     return res.json(info.response);
                     // }
-                  // });
+                  });
                 }
               });
             })
