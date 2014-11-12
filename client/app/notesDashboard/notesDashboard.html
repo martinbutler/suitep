@@ -61,11 +61,15 @@ This is the managerDashboard view.
       </ul>
 
       <div ng-show="projectName.name">
-        <label>Select Project Team:&nbsp;</label>
-        <button type="button" class="btn btn-default" ng-model="users" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="contact as contact.name for contact in allContacts" bs-select> 
-          Action <span class="caret"></span> 
-        </button>
-        <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="setTeam()"><i class="fa fa-group"></i> Save Team</button>
+        <div ng-hide="teamSet">
+          <label>Select Project Team:&nbsp;</label>
+          <button type="button" class="btn btn-default" ng-model="users" data-html="1" data-multiple="1" data-animation="am-flip-x" ng-options="contact as contact.name for contact in allContacts" bs-select> 
+            Action <span class="caret"></span> 
+          </button>
+          <div>
+            <button type="submit" class="btn btn-primary" ng-model="htmlcontent" ng-click="setTeam()"><i class="fa fa-group"></i> Save Team</button>
+          </div>
+        </div>
       </div>
 
     </div>   
@@ -80,7 +84,8 @@ This is the managerDashboard view.
       </div>
       <li ng-repeat="action in actionItems" 
           ng-click="select( action )"
-          ng-class="{selected:action.isSelected}">
+          ng-class="{selected:action.isSelected}"
+          ng-hide="action.completed">
         {{action.title}}
       </li>
     </ul>  

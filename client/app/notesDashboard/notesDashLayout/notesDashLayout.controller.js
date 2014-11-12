@@ -16,11 +16,6 @@ angular.module('userlist', ['mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
       sort: false
     });
   })
-  // .config(function($selectProvider) {
-  //   angular.extend($selectProvider.defaults, {
-  //     all-none-buttons: true
-  //   });
-  // })
 
 
   .controller('userlistCtrl', function( $scope, $timeout, container, state, $window, $http) {
@@ -35,6 +30,7 @@ angular.module('userlist', ['mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
     var currentUser = $window.currentUser;
 
     $scope.select = function( user ) {
+      console.log('ding');
       selectedUser.isSelected = false;
       user.isSelected = true;
       selectedUser = user;
@@ -61,6 +57,9 @@ angular.module('userlist', ['mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
             $scope.projectData = data;
             $scope.projectName = projectName;
             $scope.users = data;
+            if ($scope.users.length > 0) {
+              $scope.teamSet = true;
+            }
             container.extendState({ projectName: projectName });
 
             $http.get('api/users/contacts/'+currentUser._id).
@@ -73,7 +72,8 @@ angular.module('userlist', ['mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
     });
 
     $scope.setTeam = function() {
-      console.log($scope.users);
+      // console.log($scope.users);
+      $scope.teamSet = true;
       $scope.users.forEach(function(obj) {
         console.log(obj);
         $http.put('/api/projects/contacts/'+$scope.projectName._id, {contact: obj._id});
@@ -88,7 +88,48 @@ angular.module('userlist', ['mgcrea.ngStrap', 'ngAnimate', 'ngSanitize'])
 angular.module('userdetails', [] )
   .controller('userdetailsCtrl', function( $scope, container, state, $http) {
     $scope.user = state.user || null;
+
+
     // $scope.htmlcontent = state.htmltexttest || null;
+    // select stuff: *****************************************
+    var selectedAction = {};
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1;
+    var yyyy = today.getFullYear();
+    if(dd<10) { dd='0'+dd };
+    if(mm<10) { mm='0'+mm }; 
+    today = yyyy+'/'+mm+'/'+dd;
+    $scope.select = function( action ) {
+      console.log('action ding');
+      selectedAction.isSelected = false;
+      action.isSelected = true;
+      selectedAction = action;
+      // container.extendState({ selectedActionIndex: $scope.actions.indexOf( action ) });
+      // container.layoutManager.eventHub.emit( 'actionSelected', action );
+      console.log(selectedAction);
+
+
+      var updateTxt = 'CLOSED: ' + today + ':';
+      if($scope.newUpdate !== '') {
+        updateTxt += ' ' +$scope.newUpdate;
+      } 
+
+      $http.put('/api/actionItems/updateUpdates/'+selectedAction._id, {update: updateTxt, completed: true});
+      
+      console.log('select AI', $scope.actionItems);
+      $scope.actionItems.forEach(function (obj) {
+        if(obj._id == selectedAction._id) {
+          obj.completed = true;
+        }
+      });
+
+      container.layoutManager.eventHub.emit( 'actionItems', $scope.actionItems );
+
+    };
+  
+
+      // ******************************************
 
     container.layoutManager.eventHub.on( 'userSelected', function( user ){
       $scope.user = user;
@@ -107,12 +148,14 @@ angular.module('userdetails', [] )
             // projectName.contacts.forEach(function(contact_id) {
         $http.get('api/projects/actions/'+projectName._id).
           success(function(data, status, headers, config) {
-            $scope.ActionItems = data;
+            // $scope.ActionItems = data;
             $scope.projectName = projectName;
             container.extendState({ projectName: projectName });
-            data.forEach(function(obj) {
-              $scope.actionItems.push({name: obj.name})
-            });
+            // data.forEach(function(obj) {
+            //   if(!obj.completed) {
+            //     $scope.actionItems.push(obj);
+            //   }
+            // });
             $scope.actionItems = data;
             container.layoutManager.eventHub.emit( 'actionItems', $scope.actionItems );
             
@@ -275,6 +318,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
     };
 
     $scope.createNewProject = function() {
+      $scope.teamSet = false;
       var projectTemp;
       $http.post('api/projects/', { name: $scope.newProjectName, user: currentUser._id, startDate: (new Date()), userEmail: currentUser.email }).
         success(function(data, status, headers, config) {
@@ -340,26 +384,27 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
       if(mm<10) { mm='0'+mm }; 
       today = yyyy+'/'+mm+'/'+dd;
       // for creating projects and meeting notes... first iteration for seeding data
-      if ($window.project_id === undefined) {
-        $http.post('/api/projects', { user: currentUser._id, name: $scope.projectName, Startdate: today}).
-        success(function(data, status, headers, config) {
-          // console.table({data: data}, {status: status}, {headers: headers}, {config: config});
-          $window.project_id = data._id;
+      // if ($window.project_id === undefined) {
+      //   $http.post('/api/projects', { user: currentUser._id, name: $scope.projectName, Startdate: today}).
+      //   success(function(data, status, headers, config) {
+      //     // console.table({data: data}, {status: status}, {headers: headers}, {config: config});
+      //     $window.project_id = data._id;
 
-          $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: data._id, date: today}).
-            success(function(data, status, headers, config) {
-              $window.meetingNote_id = data._id;
-              $http.put('/api/projects/updateMeeting/'+$window.project_id, { meetingNotes: data._id});
-            });
-          $http.put('/api/users/project/'+currentUser._id, {project: data._id});
-        }).
-          error(function(data, status, headers, config) {
-        });
-      } else if ($window.meetingNote_id === undefined) {
-        $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: $window.project_id, date: today}).
+      //     $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: data._id, date: today}).
+      //       success(function(data, status, headers, config) {
+      //         $window.meetingNote_id = data._id;
+      //         $http.put('/api/projects/updateMeeting/'+$window.project_id, { meetingNotes: data._id});
+      //       });
+      //     $http.put('/api/users/project/'+currentUser._id, {project: data._id});
+      //   }).
+      //     error(function(data, status, headers, config) {
+      //   });
+      // } else 
+      if ($window.meetingNote_id === undefined) {
+        $http.post('/api/meetingNotess', { notes: $scope.htmlcontent, user: currentUser._id, project: $scope.projectName_id, date: today}).
           success(function(data, status, headers, config) {
             $window.meetingNote_id = data._id;
-            $http.put('/api/projects/updateMeeting/'+$window.project_id, { meetingNotes: data._id});
+            $http.put('/api/projects/updateMeeting/'+$scope.projectName._id, { meetingNotes: data._id});
           });
       } else {
         $http.put('/api/meetingNotess/'+$window.meetingNote_id, { notes: $scope.htmlcontent});

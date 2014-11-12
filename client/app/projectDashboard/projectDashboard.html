@@ -5,24 +5,28 @@
 <div class="projectContainer">
   <div class="row">
     <div class="col-lg-12">
-      <h1 class="page-header">Project:</h1>
+      <!-- <h1 class="page-header">Project:</h1>
       <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
         <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}<button type="button" class="close" ng-click="deleteThing(thing)">&times;</button></a></li>
-      </ul>
+      </ul> -->
+      <label>Select a project:&nbsp;</label>
+      <button type="button" class="btn btn-default" ng-model="selectedProject" data-html="1" ng-options="project as project.name for project in projectData" bs-select>
+        Action <span class="caret"></span>
+      </button>
+      <div ng-show="selectedProject">
+        <label>Select a meeting:&nbsp;</label>
+        <button type="button" class="btn btn-default" ng-model="selectedMeeting" data-html="1" ng-options="meeting as meeting.date for meeting in projectMeetings" bs-select>
+          Action <span class="caret"></span>
+        </button>
+        <hr>
+        <div ta-bind="text" ng-model="meetingNotes" ta-readonly='disabled'></div>
+      </div>
     </div>
   </div>
 </div>
 
-  <form class="thing-form">
-    <label>Syncs in realtime across clients</label>
-    <p class="input-group">
-      <input type="text" class="form-control" placeholder="Add a new thing here." ng-model="newThing">
-      <span class="input-group-btn">
-        <button type="submit" class="btn btn-primary" ng-click="addThing()">Add New</button>    
-      </span> 
-    </p>
-  </form>
-</div>
+
+
 
 <footer class="footer">
   <div class="projectContainer">

@@ -136,6 +136,18 @@ exports.getActions = function (req, res, next) {
   });
 };
 
+exports.getMeetings = function (req, res, next) {
+  var projectId = req.params.id;
+  Project.findById(projectId)
+  .populate('meetingNotes')
+  .exec(function (err, meetingNotes) {
+    if (err) return next(err);
+    if (!meetingNotes) return res.send(401);
+    console.log(meetingNotes);
+    res.json(meetingNotes.meetingNotes);
+  });
+};
+
 exports.getUser = function (req, res, next) {
   var projectId = req.params.id;
   Project.findById(projectId)

@@ -19,5 +19,6 @@ router.get('/contacts/:id', controller.getContacts);
 // router.get('/userProjects/:id', controller.getUserProjects);
 router.get('/actions/:id', controller.getActions);
 router.get('/user/:id', controller.getUser);
+router.get('/meetings/:id', controller.getMeetings);
 
 module.exports = router;

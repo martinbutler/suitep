@@ -9,6 +9,12 @@ angular.module('suitePApp')
 
   .controller('MainCtrl', function ($scope, $http, socket, $aside, $modal) {
     $scope.awesomeThings = [];
+    $scope.features = [{feature: 'Take Meeting Notes'}, {feature: 'User Controller Layout'}, 
+                      {feature: 'Email Meeting Notes'}, {feature: 'Create and Assign Action Items'}, 
+                      {feature: 'Daily Status emailed Automatically'}, {feature: 'Automatic email Reminders.'},
+                      {feature: 'Works with FireFox, Chrome, and IE8'}, {feature: 'Shortcut Action Keys (coming soon)'},
+                      {feature: 'Checklist Template Integration (coming soon)'}];
+      
 
     $http.get('/api/things').success(function(awesomeThings) {
       $scope.awesomeThings = awesomeThings;
