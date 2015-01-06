@@ -29,11 +29,14 @@ exports.show = function(req, res) {
 //   });
 // };
 exports.create = function(req, res) {
+  console.log('888 create:');
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: 'suiteproductivity@gmail.com',
-        pass: 'simple!123'
+        pass: 'flash!123'
+        // user: process.env.NODEMAILER_USER,
+        // pass: process.env.NODEMAILER_PASS
     }
   });
 
@@ -60,11 +63,14 @@ exports.create = function(req, res) {
 };
 
 exports.sendTask = function(req, res) {
+  console.log('888 sendTask:');
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: 'suiteproductivity@gmail.com',
-        pass: 'simple!123'
+        pass: 'flash!123'
+        // user: process.env.NODEMAILER_USER,
+        // pass: process.env.NODEMAILER_PASS
     }
   });
 
@@ -93,11 +99,14 @@ exports.sendTask = function(req, res) {
 };
 
 exports.sendUpdate = function(req, res) {
+  console.log('888 sendupdate:');
   var transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
         user: 'suiteproductivity@gmail.com',
-        pass: 'simple!123'
+        pass: 'flash!123'
+        // user: process.env.NODEMAILER_USER,
+        // pass: process.env.NODEMAILER_PASS
     }
   });
 
@@ -109,7 +118,7 @@ exports.sendUpdate = function(req, res) {
       subject: ' ★ ' + 'Task Update for: ' + req.body.projectName,  
       text: 'Hello ' + req.body.user + ',\n\nProject: ' + req.body.projectName + '\nAction Item: ' 
             + req.body.title +':\nDescription: ' + req.body.description + '\n\nDue Date: ' + Date(req.body.dueDate) 
-            + '\n\n' + req.body.owner  + ' prodived the following update:\n     ' + req.body.updateTxt //'<b>Hello world ✔</b>' // html body
+            + '\n\n' + req.body.owner  + ' prodived the following update:\n     ' + req.body.updateTxt + '<div itemprop="action" itemscope itemtype="http://schema.org/ViewAction"><link itemprop="url" href="https://github.com/pouchdb/pouchdb/pull/3015#issuecomment-64062956"></link><meta itemprop="name" content="View Pull Request"></meta></div>' //'<b>Hello world ✔</b>' // html body
   };
 
   // send mail with defined transport object

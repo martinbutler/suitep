@@ -363,6 +363,7 @@ angular.module('noteTaking', ['textAngular', 'mgcrea.ngStrap', 'ngAnimate', 'ngS
           } 
         }
       });
+      emailContent += '<div itemprop="action" itemscope itemtype="http://schema.org/ViewAction"><link itemprop="url" href="https://github.com/pouchdb/pouchdb/pull/3015#issuecomment-64062956"></link><meta itemprop="name" content="View Pull Request"></meta></div>';
       setTimeout(function(){
         $http.post('/api/sendMails', { content: emailContent, projectName: $scope.projectName, 
                                       replyTo: currentUser.email, name: currentUser.name, 

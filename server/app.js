@@ -29,6 +29,7 @@ require('./config/socketio')(socketio);
 require('./config/express')(app);
 require('./routes')(app);
 require('./api/cronJobs/backEndTasks');
+require('./api/cronJobs/sampleCronTasks');
 
 // app.use(nodemailer); 
 
